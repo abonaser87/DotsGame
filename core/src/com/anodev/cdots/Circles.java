@@ -1,5 +1,6 @@
 package com.anodev.cdots;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -8,19 +9,26 @@ import com.badlogic.gdx.math.Vector2;
  * Created by 84170 on 05/01/2016.
  */
 public class Circles {
-    private static final float SPEED = -50.0f;
+    private static final float SPEED = 100.0f;
     private static final float radius = 50.0f;
     private static final int SEGMENTS = 500;
     Vector2 position;
     Vector2 velocity;
     Color color;
-
     public Circles(float xOffset, float yOffset, Color color) {
         position = new Vector2();
         this.color = color;
         position.x = xOffset;
         position.y = yOffset;
-        velocity = new Vector2(0, 0);
+        velocity = new Vector2();
+    }
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    public void setPosition(Vector2 position) {
+        this.position = position;
     }
 
     public void update(float delta) {
@@ -35,6 +43,6 @@ public class Circles {
     }
 
     public boolean isNotInScreen() {
-        return position.y < -radius;
+        return position.y > Gdx.graphics.getHeight() + radius;
     }
 }

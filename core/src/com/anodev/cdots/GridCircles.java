@@ -13,46 +13,57 @@ import java.util.Random;
  */
 public class GridCircles {
     private static final int coulmns = 3;
-    private static final int rows = 2;
+    private static final int rows = 3;
     Array<Color> colors = new Array<Color>();
     Random rand = new Random();
     Array<Circles> circle;
-
+    int screenWidth = Gdx.graphics.getWidth();
+    int screenHeight = Gdx.graphics.getHeight();
+    int xStep = screenWidth / (coulmns);
+    int yStep = screenHeight / (rows);
+    int row = rows;
     public GridCircles() {
         circle = new Array<Circles>();
         colors.add(Color.RED);
         colors.add(Color.BLUE);
         colors.add(Color.YELLOW);
-        createGrid(rows, Gdx.graphics.getHeight() / 2);
-
+        createGrid(rows, -Gdx.graphics.getHeight());
     }
 
     private void createGrid(int rows, float offset) {
-        int screenWidth = Gdx.graphics.getWidth();
-        int screenHeight = Gdx.graphics.getHeight();
-        int xStep = screenWidth / (coulmns);
-        int yStep = screenHeight / (rows);
+
+
         for (int row = 1; row < rows; row++) {
             for (int col = 1; col < coulmns; col++) {
                 float xOffset = col * xStep;
                 float yOffset = yStep * row;
-                circle.add(new Circles(xOffset, yOffset + offset, colors.get(rand.nextInt(3))));
+                createCircle(xOffset, yOffset + offset);
             }
         }
     }
 
+    private void createCircle(float xOffset, float yOffset) {
+        circle.add(new Circles(xOffset, yOffset, colors.get(rand.nextInt(3))));
+    }
+
     public void update(float delta, ExtendViewport viewport) {
+
         for (int i = 0; i < circle.size; i++) {
             Circles x = circle.get(i);
-            x.update(delta);
             if (x.isNotInScreen()) {
-                createGrid(2, 500 * i);
+
+                System.out.println("i=" + i);
+                System.out.println("col=" + row);
                 circle.removeIndex(i);
+                createCircle(x.getPosition().x, -x.getPosition().y - x.getPosition().y * delta - yStep * row);
+                row--;
+                if (row < 0) {
+                    row = rows;
+                }
+
             }
+            x.update(delta);
         }
-//        for(Circles x:circle){
-//            x.update(delta);
-//        }
 
     }
 
