@@ -12,15 +12,25 @@ public class Circles {
     private static final float SPEED = 100.0f;
     private static final float radius = 50.0f;
     private static final int SEGMENTS = 500;
-    Vector2 position;
-    Vector2 velocity;
-    Color color;
+    private static final float MAX_SPEED = 500.0f;
+    private Vector2 position;
+    private Vector2 velocity;
+    private Color color;
+
     public Circles(float xOffset, float yOffset, Color color) {
         position = new Vector2();
         this.color = color;
         position.x = xOffset;
         position.y = yOffset;
         velocity = new Vector2();
+    }
+
+    public Vector2 getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(Vector2 velocity) {
+        this.velocity = velocity;
     }
 
     public Vector2 getPosition() {
@@ -33,6 +43,9 @@ public class Circles {
 
     public void update(float delta) {
         velocity.y += delta * SPEED;
+        if (velocity.y > MAX_SPEED) {
+            velocity.y = MAX_SPEED;
+        }
         position.y += delta * velocity.y;
     }
 

@@ -3,7 +3,9 @@ package com.anodev.cdots;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 import java.util.Random;
@@ -13,26 +15,23 @@ import java.util.Random;
  */
 public class GridCircles {
     private static final int coulmns = 3;
-    private static final int rows = 3;
+    private static final int rows = 7;
     Array<Color> colors = new Array<Color>();
     Random rand = new Random();
-    Array<Circles> circle;
+    DelayedRemovalArray<Circles> circle;
     int screenWidth = Gdx.graphics.getWidth();
     int screenHeight = Gdx.graphics.getHeight();
     int xStep = screenWidth / (coulmns);
     int yStep = screenHeight / (rows);
-    int row = rows;
     public GridCircles() {
-        circle = new Array<Circles>();
+        circle = new DelayedRemovalArray<Circles>();
         colors.add(Color.RED);
         colors.add(Color.BLUE);
         colors.add(Color.YELLOW);
-        createGrid(rows, -Gdx.graphics.getHeight());
+        createGrid(rows, -50);
     }
 
     private void createGrid(int rows, float offset) {
-
-
         for (int row = 1; row < rows; row++) {
             for (int col = 1; col < coulmns; col++) {
                 float xOffset = col * xStep;
@@ -47,24 +46,23 @@ public class GridCircles {
     }
 
     public void update(float delta, ExtendViewport viewport) {
-
+        for (Circles x : circle) {
+            x.update(delta);
+        }
+        if (circle.get(circle.size - 1).isNotInScreen()) {
+            createGrid(rows, -circle.get(0).getPosition().y - 50 - yStep);
+            for (Circles c : circle) {
+                c.setVelocity(new Vector2(0, 500));
+            }
+        }
+        circle.begin();
         for (int i = 0; i < circle.size; i++) {
             Circles x = circle.get(i);
             if (x.isNotInScreen()) {
-
-                System.out.println("i=" + i);
-                System.out.println("col=" + row);
                 circle.removeIndex(i);
-                createCircle(x.getPosition().x, -x.getPosition().y - x.getPosition().y * delta - yStep * row);
-                row--;
-                if (row < 0) {
-                    row = rows;
-                }
-
             }
-            x.update(delta);
         }
-
+        circle.end();
     }
 
     public void render(ShapeRenderer renderer) {
