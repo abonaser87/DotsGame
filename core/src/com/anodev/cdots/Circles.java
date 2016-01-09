@@ -10,9 +10,9 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Circles {
     private static final float SPEED = 100.0f;
-    private static final float radius = 50.0f;
+    private static final float radius = 1.0f / 12 * Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth());
     private static final int SEGMENTS = 500;
-    private static final float MAX_SPEED = 500.0f;
+    private static final float MAX_SPEED = 800.0f;
     private Vector2 position;
     private Vector2 velocity;
     private Color color;
@@ -42,11 +42,11 @@ public class Circles {
     }
 
     public void update(float delta) {
-        velocity.y += delta * SPEED;
-        if (velocity.y > MAX_SPEED) {
-            velocity.y = MAX_SPEED;
-        }
-        position.y += delta * velocity.y;
+//        velocity.y += delta * SPEED;
+//        if (velocity.y > MAX_SPEED) {
+//            velocity.y = MAX_SPEED;
+//        }
+//        position.y += delta * velocity.y;
     }
 
     public void render(ShapeRenderer renderer) {

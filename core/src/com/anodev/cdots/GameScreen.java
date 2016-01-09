@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /**
  * Created by 84170 on 05/01/2016.
@@ -15,7 +15,7 @@ public class GameScreen extends ScreenAdapter {
     private static final float WORLD_SIZE = 480;
 
     ShapeRenderer renderer;
-    ExtendViewport viewport;
+    FitViewport viewport;
 
 
     GridCircles grid;
@@ -24,7 +24,7 @@ public class GameScreen extends ScreenAdapter {
     public void show() {
 
         renderer = new ShapeRenderer();
-        viewport = new ExtendViewport(540, 960);
+        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         grid = new GridCircles();
 
     }
