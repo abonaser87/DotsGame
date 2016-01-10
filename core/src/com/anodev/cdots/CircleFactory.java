@@ -13,6 +13,7 @@ public class CircleFactory {
     public static Circles getCircle(Color color) {
         Circles circle = circleByColor.get(color);
         if (circle == null) {
+            circle = new Circles(color);
             circleByColor.put(color, circle);
         }
         return circle;
