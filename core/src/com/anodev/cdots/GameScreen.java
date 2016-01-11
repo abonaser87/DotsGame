@@ -25,7 +25,7 @@ public class GameScreen extends ScreenAdapter {
 
         renderer = new ShapeRenderer();
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        grid = new GridCircles();
+        grid = new GridCircles(viewport);
 
     }
 
@@ -49,7 +49,7 @@ public class GameScreen extends ScreenAdapter {
 
         renderer.setProjectionMatrix(viewport.getCamera().combined);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
-        grid.render(renderer);
+        grid.render(renderer, delta);
 
         renderer.end();
 

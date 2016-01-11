@@ -15,57 +15,56 @@ import java.util.Random;
  */
 public class GridCircles {
     private static final int coulmns = 3;
-    private static final int rows = 9;
+    private static final int rows = 3;
     Array<Color> colors = new Array<Color>();
     Random rand = new Random();
-    DelayedRemovalArray<Circles> circle;
+    DelayedRemovalArray<CirclesClient> circle;
+    FitViewport viewport;
     int screenWidth = Gdx.graphics.getWidth();
     int screenHeight = Gdx.graphics.getHeight();
     int xStep = screenWidth / coulmns;
     int yStep = screenHeight / 7;
-    Array<Vector2> coord = new Array<Vector2>();
-    public GridCircles() {
-        circle = new DelayedRemovalArray<Circles>();
+    CirclesClient x;
+    TouchProcessor t;
+
+    public GridCircles(FitViewport viewport) {
+        this.viewport = viewport;
+        circle = new DelayedRemovalArray<CirclesClient>();
         colors.add(Color.RED);
         colors.add(Color.BLUE);
         colors.add(Color.YELLOW);
-        createGrid(rows, 0);
-
-        createGrid(rows, -yStep * (rows - 1));
+        createGrid(rows, 0, new Vector2(0, 0));
+//        createGrid(rows, - circle.get(0).getPosition().y ,circle.get(circle.size-1).getVelocity());
+//        createGrid(rows, -yStep * (rows - 1),new Vector2(0,0));
     }
 
-    private void createGrid(int rows, float offset) {
+    private void createGrid(int rows, float offset, Vector2 velocity) {
         for (int row = 1; row < rows; row++) {
             for (int col = 1; col < coulmns; col++) {
                 float xOffset = col * xStep;
                 float yOffset = yStep * row;
-                coord.add(new Vector2(xOffset, yOffset + offset));
-                createCircle(xOffset, yOffset);
+                createCircle(xOffset, yOffset + offset, velocity);
             }
         }
     }
 
-    private void createCircle(float xOffset, float yOffset) {
-        Circles bigCircle = CircleFactory.getCircle(colors.get(rand.nextInt(3)));
-        bigCircle.setPosition(new Vector2(xOffset, yOffset));
-        circle.add(bigCircle);
-//        circle.add(new Circles(xOffset, yOffset, colors.get(rand.nextInt(3))));
+    private void createCircle(float xOffset, float yOffset, Vector2 velocity) {
+        x = new CirclesClient(xOffset, yOffset, colors.get(rand.nextInt(3)), viewport);
+        x.setVelocity(velocity);
+        circle.add(x);
     }
 
     public void update(float delta, FitViewport viewport) {
         for (int i = 0; i < circle.size; i++) {
-            Circles x = circle.get(i);
+            CirclesClient x = circle.get(i);
             x.update(delta);
         }
-//        if (circle.get(0).isNotInScreen()) {
-//            createGrid(rows, -circle.get(circle.size - 1).getPosition().y + yStep * (rows - 1));
-//            for (Circles c : circle) {
-//                c.setVelocity(circle.get(0).getVelocity());
-//            }
+//        if (circle.get(circle.size - 1).isNotInScreen()) {
+//            createGrid(rows, - circle.get(0).getPosition().y ,circle.get(circle.size-1).getVelocity());
 //        }
 //        circle.begin();
 //        for (int i = 0; i < circle.size; i++) {
-//            Circles x = circle.get(i);
+//            CirclesClient x = circle.get(i);
 //            if (x.isNotInScreen()) {
 //                circle.removeIndex(i);
 //            }
@@ -73,16 +72,9 @@ public class GridCircles {
 //        circle.end();
     }
 
-    public void render(ShapeRenderer renderer) {
-        for (int i = 0; i < circle.size; i++) {
-            Circles x = circle.get(i);
-            Vector2 coordinate = coord.get(i);
-            x.render(coordinate.x, coordinate.y, renderer);
-            System.out.println(x.getVelocity());
-
+    public void render(ShapeRenderer renderer, float delta) {
+        for (CirclesClient x : circle) {
+            x.render(renderer);
         }
-//        for (Circles x : circle) {
-//            x.render(x.getPosition().x,x.getPosition().y,renderer);
-//        }
     }
 }
