@@ -15,7 +15,7 @@ public class CirclesClient {
     private static final int SEGMENTS = 500;
     private static final float MAX_SPEED = 800.0f;
     FitViewport viewport;
-    TouchProcessor t;
+
     private Circles circle;
     private Vector2 position;
     private Vector2 velocity;
@@ -25,8 +25,6 @@ public class CirclesClient {
         this.position = new Vector2(xOffset, yOffset);
         this.velocity = new Vector2(0, 0);
         this.viewport = viewport;
-        this.t = new TouchProcessor(this, viewport);
-        Gdx.input.setInputProcessor(t);
     }
 
     public Vector2 getPosition() {
@@ -46,11 +44,11 @@ public class CirclesClient {
     }
 
     public void update(float delta) {
-//        velocity.mulAdd(new Vector2(0,SPEED),delta);
-//        if (velocity.y > MAX_SPEED) {
-//            velocity.y = MAX_SPEED;
-//        }
-//        position.y += delta * velocity.y;
+        velocity.mulAdd(new Vector2(0, SPEED), delta);
+        if (velocity.y > MAX_SPEED) {
+            velocity.y = MAX_SPEED;
+        }
+        position.y += delta * velocity.y;
     }
 
     public void render(ShapeRenderer renderer) {
@@ -59,13 +57,5 @@ public class CirclesClient {
 
     public boolean isNotInScreen() {
         return position.y > Gdx.graphics.getHeight() + radius;
-    }
-
-    public void isTouched(int screenX, int screenY) {
-        Vector2 worldClick = viewport.unproject(new Vector2(screenX, screenY));
-//        System.out.println(worldClick);
-        if (worldClick.dst(position) < radius) {
-            System.out.println("Inside" + position);
-        }
     }
 }

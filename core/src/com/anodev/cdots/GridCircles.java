@@ -1,6 +1,7 @@
 package com.anodev.cdots;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -13,9 +14,9 @@ import java.util.Random;
 /**
  * Created by 84170 on 05/01/2016.
  */
-public class GridCircles {
+public class GridCircles extends InputAdapter {
     private static final int coulmns = 3;
-    private static final int rows = 3;
+    private static final int rows = 9;
     Array<Color> colors = new Array<Color>();
     Random rand = new Random();
     DelayedRemovalArray<CirclesClient> circle;
@@ -25,7 +26,7 @@ public class GridCircles {
     int xStep = screenWidth / coulmns;
     int yStep = screenHeight / 7;
     CirclesClient x;
-    TouchProcessor t;
+
 
     public GridCircles(FitViewport viewport) {
         this.viewport = viewport;
@@ -34,6 +35,7 @@ public class GridCircles {
         colors.add(Color.BLUE);
         colors.add(Color.YELLOW);
         createGrid(rows, 0, new Vector2(0, 0));
+        Gdx.input.setInputProcessor(this);
 //        createGrid(rows, - circle.get(0).getPosition().y ,circle.get(circle.size-1).getVelocity());
 //        createGrid(rows, -yStep * (rows - 1),new Vector2(0,0));
     }
@@ -70,6 +72,17 @@ public class GridCircles {
 //            }
 //        }
 //        circle.end();
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        Vector2 worldClick = viewport.unproject(new Vector2(screenX, screenY));
+        for (CirclesClient x : circle) {
+            if (worldClick.dst(x.getPosition()) < CirclesClient.radius) {
+                System.out.println("Inside" + x.getPosition());
+            }
+        }
+        return super.touchDown(screenX, screenY, pointer, button);
     }
 
     public void render(ShapeRenderer renderer, float delta) {
