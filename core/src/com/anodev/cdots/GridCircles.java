@@ -26,8 +26,8 @@ public class GridCircles extends InputAdapter {
     int xStep = screenWidth / coulmns;
     int yStep = screenHeight / 7;
     CirclesClient x;
-
-
+    ColorChecker check;
+    Array<Color> colorChecker = new Array<Color>();
     public GridCircles(FitViewport viewport) {
         this.viewport = viewport;
         circle = new DelayedRemovalArray<CirclesClient>();
@@ -79,7 +79,17 @@ public class GridCircles extends InputAdapter {
         Vector2 worldClick = viewport.unproject(new Vector2(screenX, screenY));
         for (CirclesClient x : circle) {
             if (worldClick.dst(x.getPosition()) < CirclesClient.radius) {
-                System.out.println("Inside" + x.getPosition());
+                colorChecker.add(x.color);
+                if (colorChecker.size > 1) {
+
+                    if (x.color.equals(colors.get(colorChecker.size - 2))) {
+                        System.out.println("Matching");
+                        colorChecker.removeIndex(colorChecker.size - 1);
+                    } else {
+
+                        System.out.println("Not Matching" + colorChecker.size);
+                    }
+                }
             }
         }
         return super.touchDown(screenX, screenY, pointer, button);

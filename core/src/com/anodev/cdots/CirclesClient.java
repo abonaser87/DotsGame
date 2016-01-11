@@ -15,16 +15,20 @@ public class CirclesClient {
     private static final int SEGMENTS = 500;
     private static final float MAX_SPEED = 800.0f;
     FitViewport viewport;
-
+    Color color;
     private Circles circle;
     private Vector2 position;
     private Vector2 velocity;
-
     public CirclesClient(float xOffset, float yOffset, Color color, FitViewport viewport) {
         this.circle = CircleFactory.getCircle(color);
         this.position = new Vector2(xOffset, yOffset);
         this.velocity = new Vector2(0, 0);
         this.viewport = viewport;
+        this.color = color;
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     public Vector2 getPosition() {
@@ -44,11 +48,11 @@ public class CirclesClient {
     }
 
     public void update(float delta) {
-        velocity.mulAdd(new Vector2(0, SPEED), delta);
-        if (velocity.y > MAX_SPEED) {
-            velocity.y = MAX_SPEED;
-        }
-        position.y += delta * velocity.y;
+//        velocity.mulAdd(new Vector2(0, SPEED), delta);
+//        if (velocity.y > MAX_SPEED) {
+//            velocity.y = MAX_SPEED;
+//        }
+//        position.y += delta * velocity.y;
     }
 
     public void render(ShapeRenderer renderer) {
