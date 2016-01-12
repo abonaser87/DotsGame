@@ -10,23 +10,15 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  * Created by 84170 on 05/01/2016.
  */
 public class GameScreen extends ScreenAdapter {
-
-
-    private static final float WORLD_SIZE = 480;
-
     ShapeRenderer renderer;
     FitViewport viewport;
-
-
     GridCircles grid;
 
     @Override
     public void show() {
-
         renderer = new ShapeRenderer();
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         grid = new GridCircles(viewport);
-
     }
 
     @Override
@@ -52,6 +44,5 @@ public class GameScreen extends ScreenAdapter {
         grid.render(renderer, delta);
 
         renderer.end();
-
     }
 }
