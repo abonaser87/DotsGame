@@ -15,8 +15,10 @@ public class Circles {
     }
 
     public void render(float xOffset, float yOffset, float radius, int SEGMENTS, ShapeRenderer renderer) {
+        renderer.begin();
         renderer.set(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(color);
         renderer.circle(xOffset, yOffset, radius, SEGMENTS);
+        renderer.end();
     }
 }

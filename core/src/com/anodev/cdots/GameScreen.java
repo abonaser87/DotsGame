@@ -48,7 +48,7 @@ public class GameScreen extends ScreenAdapter {
         grid.update(delta, viewport);
 
         renderer.setProjectionMatrix(viewport.getCamera().combined);
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
+        renderer.setAutoShapeType(true);
         grid.render(renderer, delta);
 
         renderer.end();

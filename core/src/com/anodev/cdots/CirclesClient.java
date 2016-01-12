@@ -10,13 +10,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  * Created by 84170 on 11/01/2016.
  */
 public class CirclesClient {
-    static final float radius = 1.0f / 12 * Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth());
-    private static final float SPEED = 10.0f;
-    private static final int SEGMENTS = 500;
-    private static final float MAX_SPEED = 800.0f;
-    FitViewport viewport;
-    Color color;
+    private FitViewport viewport;
     private Circles circle;
+    private Color color;
     private Vector2 position;
     private Vector2 velocity;
     public CirclesClient(float xOffset, float yOffset, Color color, FitViewport viewport) {
@@ -48,18 +44,18 @@ public class CirclesClient {
     }
 
     public void update(float delta) {
-//        velocity.mulAdd(new Vector2(0, SPEED), delta);
-//        if (velocity.y > MAX_SPEED) {
-//            velocity.y = MAX_SPEED;
-//        }
-//        position.y += delta * velocity.y;
+        velocity.mulAdd(new Vector2(0, Constants.SPEED), delta);
+        if (velocity.y > Constants.MAX_SPEED) {
+            velocity.y = Constants.MAX_SPEED;
+        }
+        position.y += delta * velocity.y;
     }
 
     public void render(ShapeRenderer renderer) {
-        circle.render(position.x, position.y, radius, SEGMENTS, renderer);
+        circle.render(position.x, position.y, Constants.radius, Constants.SEGMENTS, renderer);
     }
 
     public boolean isNotInScreen() {
-        return position.y > Gdx.graphics.getHeight() + radius;
+        return position.y > Gdx.graphics.getHeight() + Constants.radius;
     }
 }
