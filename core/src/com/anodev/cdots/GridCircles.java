@@ -23,6 +23,7 @@ public class GridCircles extends InputAdapter {
     LineShape line;
     Array<LineShape> lines = new Array<LineShape>();
     Array<Vector2> postions = new Array<Vector2>();
+    float newY;
     public GridCircles(FitViewport viewport) {
         this.viewport = viewport;
         circle = new DelayedRemovalArray<CirclesClient>();
@@ -32,7 +33,7 @@ public class GridCircles extends InputAdapter {
         Gdx.input.setInputProcessor(this);
         createGrid(Constants.rows, 0, new Vector2(0, 0));
 //        createGrid(Constants.rows, - circle.get(0).getPosition().y ,circle.get(circle.size-1).getVelocity());
-        createGrid(Constants.rows, -Constants.yStep * (Constants.rows - 1), new Vector2(0, 0));
+//        createGrid(Constants.rows, -Constants.yStep * (Constants.rows - 1), new Vector2(0, 0));
     }
 
     private void createGrid(int rows, float offset, Vector2 velocity) {
@@ -58,7 +59,12 @@ public class GridCircles extends InputAdapter {
         }
         // TODO : SCROLLING CIRCLES
         if (circle.get(circle.size - 1).isNotInScreen()) {
-            createGrid(Constants.rows, -circle.get(0).getPosition().y, circle.get(0).getVelocity());
+            System.out.println(circle.get(circle.size - 1).getPosition());
+            System.out.println(circle.get(0).getPosition());
+            newY = circle.get(0).getPosition().y - 2 * Constants.yStep - (circle.get(circle.size - 1).getPosition().y - circle.get(0).getPosition().y);
+            System.out.println(newY);
+            createGrid(Constants.rows, newY, circle.get(0).getVelocity());
+            System.out.println((-circle.get(circle.size - 1).getPosition().y - Constants.yStep * delta) * delta);
         }
         circle.begin();
         for (int i = 0; i < circle.size; i++) {

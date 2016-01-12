@@ -15,8 +15,8 @@ public class Constants {
 
     public static final int screenWidth = Gdx.graphics.getWidth();
     public static final int screenHeight = Gdx.graphics.getHeight();
-    public static final int xStep = screenWidth / coulmns;
-    public static final int yStep = screenHeight / 7;
+    public static final float xStep = screenWidth / coulmns;
+    public static final float yStep = screenHeight / 7.0f;
 
     public static final float THICKNESS = 1.0f / 40 * Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth());
 }
