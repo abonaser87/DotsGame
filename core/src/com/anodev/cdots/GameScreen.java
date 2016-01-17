@@ -19,15 +19,23 @@ Todo:
 6-Pick the color for the player and then transtion to another color and maybe another shape.
  */
 public class GameScreen extends ScreenAdapter {
+    Constants.Difficulty difficulty;
     ShapeRenderer renderer;
     FitViewport viewport;
     GridCircles grid;
+
+    DotsGame game;
+
+    public GameScreen(DotsGame game, Constants.Difficulty difficulty) {
+        this.game = game;
+        this.difficulty = difficulty;
+    }
 
     @Override
     public void show() {
         renderer = new ShapeRenderer();
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        grid = new GridCircles(viewport);
+        grid = new GridCircles(viewport, difficulty);
     }
 
     @Override

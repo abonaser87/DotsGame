@@ -15,26 +15,31 @@ import java.util.Random;
  * Created by 84170 on 05/01/2016.
  */
 public class GridCircles extends InputAdapter {
+    Constants.Difficulty difficulty;
     Array<Color> colors = new Array<Color>();
     Random rand = new Random();
     DelayedRemovalArray<CirclesClient> circle;
     FitViewport viewport;
     CirclesClient x;
     float newY;
-    public GridCircles(FitViewport viewport) {
+    private float xStep;
+
+    public GridCircles(FitViewport viewport, Constants.Difficulty difficulty) {
         this.viewport = viewport;
+        this.difficulty = difficulty;
         circle = new DelayedRemovalArray<CirclesClient>();
         colors.add(Color.valueOf("#4d5b73ff"));
         colors.add(Color.valueOf("#8a3c42ff"));
         colors.add(Color.valueOf("#a39b8fff"));
         Gdx.input.setInputProcessor(this);
-        createGrid(Constants.rows, 0, new Vector2(0, 0));
+        xStep = Constants.screenWidth / difficulty.coloumns;
+        createGrid(Constants.rows, -Constants.screenHeight, new Vector2(0, -50));
     }
 
     private void createGrid(int rows, float offset, Vector2 velocity) {
         for (int row = 1; row < rows; row++) {
-            for (int col = 1; col < Constants.coulmns; col++) {
-                float xOffset = col * Constants.xStep;
+            for (int col = 1; col < difficulty.coloumns; col++) {
+                float xOffset = col * xStep;
                 float yOffset = Constants.yStep * row;
                 createCircle(xOffset, yOffset + offset, velocity);
             }
@@ -42,7 +47,7 @@ public class GridCircles extends InputAdapter {
     }
 
     private void createCircle(float xOffset, float yOffset, Vector2 velocity) {
-        x = new CirclesClient(xOffset, yOffset, colors.get(rand.nextInt(3)), viewport);
+        x = new CirclesClient(xOffset, yOffset, colors.get(rand.nextInt(difficulty.coloumns - 1)), viewport);
         x.setVelocity(velocity);
         circle.add(x);
     }
