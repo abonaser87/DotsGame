@@ -3,6 +3,7 @@ package com.anodev.cdots;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -26,6 +27,7 @@ public class DifficultyScreen extends InputAdapter implements Screen {
 
     public DifficultyScreen(DotsGame game) {
         this.game = game;
+
     }
 
     @Override
@@ -33,12 +35,10 @@ public class DifficultyScreen extends InputAdapter implements Screen {
         renderer = new ShapeRenderer();
         batch = new SpriteBatch();
 
-        // TODO: Initialize a FitViewport with the difficulty world size constant
         viewport = new FitViewport(Constants.screenWidth, Constants.screenHeight);
         Gdx.input.setInputProcessor(this);
 
-        font = new BitmapFont();
-        // TODO: Set the font scale using the constant we defined
+        font = new BitmapFont(Gdx.files.internal("data/modenine.fnt"));
         font.getData().setScale(Constants.DIFFICULTY_LABEL_SCALE);
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
@@ -52,7 +52,7 @@ public class DifficultyScreen extends InputAdapter implements Screen {
         renderer.setProjectionMatrix(viewport.getCamera().combined);
 
 
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
+        renderer.begin(ShapeRenderer.ShapeType.Line);
 
         renderer.setColor(Constants.EASY_COLOR);
         renderer.circle(Constants.EASY_CENTER.x, Constants.EASY_CENTER.y, Constants.DIFFICULTY_BUBBLE_RADIUS);
@@ -71,6 +71,7 @@ public class DifficultyScreen extends InputAdapter implements Screen {
         batch.begin();
 
         final GlyphLayout easyLayout = new GlyphLayout(font, Constants.EASY_LABEL);
+        font.setColor(Color.BLACK);
         font.draw(batch, Constants.EASY_LABEL, Constants.EASY_CENTER.x, Constants.EASY_CENTER.y + easyLayout.height / 2, 0, Align.center, false);
 
         final GlyphLayout mediumLayout = new GlyphLayout(font, Constants.MEDIUM_LABEL);
