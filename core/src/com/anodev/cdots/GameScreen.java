@@ -9,6 +9,15 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 /**
  * Created by 84170 on 05/01/2016.
  */
+/*
+Todo:
+1-Add algorthim for colors randomness
+2-Add Difficulty
+3-Add HUD and score
+4-Add GameOver
+5-Add Leaderboard
+6-Pick the color for the player and then transtion to another color and maybe another shape.
+ */
 public class GameScreen extends ScreenAdapter {
     ShapeRenderer renderer;
     FitViewport viewport;
@@ -34,7 +43,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         viewport.apply();
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(245.0f / 255.0f, 233.0f / 255.0f, 208.0f / 255.0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         grid.update(delta, viewport);

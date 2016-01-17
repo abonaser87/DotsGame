@@ -24,9 +24,9 @@ public class GridCircles extends InputAdapter {
     public GridCircles(FitViewport viewport) {
         this.viewport = viewport;
         circle = new DelayedRemovalArray<CirclesClient>();
-        colors.add(Color.RED);
-        colors.add(Color.BLUE);
-        colors.add(Color.YELLOW);
+        colors.add(Color.valueOf("#4d5b73ff"));
+        colors.add(Color.valueOf("#8a3c42ff"));
+        colors.add(Color.valueOf("#a39b8fff"));
         Gdx.input.setInputProcessor(this);
         createGrid(Constants.rows, 0, new Vector2(0, 0));
     }
@@ -64,6 +64,13 @@ public class GridCircles extends InputAdapter {
             }
         }
         circle.end();
+        for (int i = 0; i < ColorChecker.getLines().size; i++) {
+            LineShape x = ColorChecker.getLines().get(i);
+            if (x.isNotInScreen()) {
+                ColorChecker.getLines().removeIndex(i);
+            }
+        }
+        System.out.println(ColorChecker.getLines().size);
     }
 
     @Override

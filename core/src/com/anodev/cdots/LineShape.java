@@ -1,5 +1,6 @@
 package com.anodev.cdots;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -24,5 +25,9 @@ public class LineShape {
         renderer.setColor(color);
         renderer.rectLine(point1, point2, Constants.THICKNESS);
         renderer.end();
+    }
+
+    public boolean isNotInScreen() {
+        return point2.y > Gdx.graphics.getHeight();
     }
 }

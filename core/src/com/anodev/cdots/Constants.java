@@ -6,7 +6,7 @@ import com.badlogic.gdx.Gdx;
  * Created by abdullah on 1/8/16.
  */
 public class Constants {
-    public static final int coulmns = 3;
+    public static final int coulmns = 4;
     public static final int rows = 9;
     public static final float radius = 1.0f / 12 * Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth());
     public static final float SPEED = 10.0f;

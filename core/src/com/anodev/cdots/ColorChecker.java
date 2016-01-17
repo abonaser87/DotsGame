@@ -21,7 +21,6 @@ public class ColorChecker {
         colors.add(color);
         postions.add(postion);
     }
-
     public static boolean isMatching() {
         if (colors.size > 1) {
             if (colors.get(0).equals(colors.get(colors.size - 1))) {
