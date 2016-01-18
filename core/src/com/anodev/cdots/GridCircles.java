@@ -69,13 +69,19 @@ public class GridCircles extends InputAdapter {
             }
         }
         circle.end();
+        if (ColorChecker.getLines().size > 0) {
+            if (ColorChecker.getLines().get(ColorChecker.getLines().size - 1).isNotInScreen()) {
+                // TODO : GAMEOVER PAY COINS TO CONTINUE
+                System.out.println("Last line out GAME OVER");
+            }
+        }
         for (int i = 0; i < ColorChecker.getLines().size; i++) {
             LineShape x = ColorChecker.getLines().get(i);
             if (x.isNotInScreen()) {
                 ColorChecker.getLines().removeIndex(i);
             }
         }
-        System.out.println(ColorChecker.getLines().size);
+
     }
 
     @Override

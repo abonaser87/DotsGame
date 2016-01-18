@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 /*
 Todo:
 1-Add algorthim for colors randomness
-2-Add Difficulty
+*2-Add Difficulty
 3-Add HUD and score
 4-Add GameOver
 5-Add Leaderboard

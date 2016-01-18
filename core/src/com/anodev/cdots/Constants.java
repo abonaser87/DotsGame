@@ -12,7 +12,7 @@ public class Constants {
     public static final float radius = 1.0f / 12 * Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth());
     public static final float SPEED = 10.0f;
     public static final int SEGMENTS = 500;
-    public static final float MAX_SPEED = 500.0f;
+    public static final float MAX_SPEED = 50.0f;
 
     public static final int screenWidth = Gdx.graphics.getWidth();
     public static final int screenHeight = Gdx.graphics.getHeight();
