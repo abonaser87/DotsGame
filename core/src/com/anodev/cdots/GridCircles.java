@@ -6,9 +6,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -34,6 +36,7 @@ public class GridCircles extends InputAdapter {
     public GridCircles(FitViewport viewport, Constants.Difficulty difficulty) {
         // TODO : ADD MENU
         currentState = GameState.RUNNING;
+        batch = new SpriteBatch();
         this.viewport = viewport;
         this.difficulty = difficulty;
         circle = new DelayedRemovalArray<CirclesClient>();
@@ -145,6 +148,11 @@ public class GridCircles extends InputAdapter {
             renderer.setColor(new Color(0, 0, 0, 0.6f));
             renderer.rect(0, 0, Constants.screenWidth, Constants.screenHeight);
             renderer.end();
+            batch.begin();
+            final GlyphLayout easyLayout = new GlyphLayout(font, Constants.EASY_LABEL);
+            font.setColor(Color.BLACK);
+            font.draw(batch, "Game Over", Constants.screenWidth / 2, Constants.screenHeight / 2 + easyLayout.height / 2, 0, Align.center, false);
+            batch.end();
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }
     }
