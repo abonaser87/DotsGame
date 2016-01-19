@@ -23,7 +23,6 @@ public class GameScreen extends ScreenAdapter {
     ShapeRenderer renderer;
     FitViewport viewport;
     GridCircles grid;
-
     DotsGame game;
 
     public GameScreen(DotsGame game, Constants.Difficulty difficulty) {
@@ -53,9 +52,7 @@ public class GameScreen extends ScreenAdapter {
         viewport.apply();
         Gdx.gl.glClearColor(245.0f / 255.0f, 233.0f / 255.0f, 208.0f / 255.0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         grid.update(delta, viewport);
-
         renderer.setProjectionMatrix(viewport.getCamera().combined);
         renderer.setAutoShapeType(true);
         grid.render(renderer, delta);

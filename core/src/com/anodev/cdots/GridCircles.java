@@ -3,6 +3,10 @@ package com.anodev.cdots;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -11,20 +15,25 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.Random;
 
+
 /**
  * Created by 84170 on 05/01/2016.
  */
 public class GridCircles extends InputAdapter {
-    Constants.Difficulty difficulty;
-    Array<Color> colors = new Array<Color>();
-    Random rand = new Random();
-    DelayedRemovalArray<CirclesClient> circle;
-    FitViewport viewport;
-    CirclesClient x;
-    float newY;
+    private Constants.Difficulty difficulty;
+    private Array<Color> colors = new Array<Color>();
+    private Random rand = new Random();
+    private DelayedRemovalArray<CirclesClient> circle;
+    private FitViewport viewport;
+    private CirclesClient x;
+    private float newY;
     private float xStep;
-
+    private GameState currentState;
+    private BitmapFont font;
+    private SpriteBatch batch;
     public GridCircles(FitViewport viewport, Constants.Difficulty difficulty) {
+        // TODO : ADD MENU
+        currentState = GameState.RUNNING;
         this.viewport = viewport;
         this.difficulty = difficulty;
         circle = new DelayedRemovalArray<CirclesClient>();
@@ -34,6 +43,9 @@ public class GridCircles extends InputAdapter {
         Gdx.input.setInputProcessor(this);
         xStep = Constants.screenWidth / difficulty.coloumns;
         createGrid(Constants.rows, -Constants.screenHeight, new Vector2(0, -50));
+        font = new BitmapFont(Gdx.files.internal("data/modenine.fnt"));
+        font.getData().setScale(Constants.DIFFICULTY_LABEL_SCALE);
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
 
     private void createGrid(int rows, float offset, Vector2 velocity) {
@@ -53,9 +65,34 @@ public class GridCircles extends InputAdapter {
     }
 
     public void update(float delta, FitViewport viewport) {
+        switch (currentState) {
+
+            case RUNNING:
+                updateRunning(delta, viewport);
+                break;
+            case GAMEOVER:
+                gameOver(delta, viewport);
+                break;
+
+        }
+
+
+    }
+
+    private void gameOver(float delta, FitViewport viewport) {
+
+    }
+
+    private void updateRunning(float delta, FitViewport viewport) {
         for (int i = 0; i < circle.size; i++) {
             CirclesClient x = circle.get(i);
             x.update(delta);
+        }
+        if (ColorChecker.getLines().size > 0) {
+            if (ColorChecker.getLines().get(ColorChecker.getLines().size - 1).isNotInScreen()) {
+                currentState = GameState.GAMEOVER;
+                System.out.println("Line out Game OVer");
+            }
         }
         if (circle.get(circle.size - 1).isNotInScreen()) {
             newY = circle.get(0).getPosition().y - 2 * Constants.yStep - (circle.get(circle.size - 1).getPosition().y - circle.get(0).getPosition().y);
@@ -69,19 +106,12 @@ public class GridCircles extends InputAdapter {
             }
         }
         circle.end();
-        if (ColorChecker.getLines().size > 0) {
-            if (ColorChecker.getLines().get(ColorChecker.getLines().size - 1).isNotInScreen()) {
-                // TODO : GAMEOVER PAY COINS TO CONTINUE
-                System.out.println("Last line out GAME OVER");
-            }
-        }
         for (int i = 0; i < ColorChecker.getLines().size; i++) {
             LineShape x = ColorChecker.getLines().get(i);
             if (x.isNotInScreen()) {
                 ColorChecker.getLines().removeIndex(i);
             }
         }
-
     }
 
     @Override
@@ -107,5 +137,21 @@ public class GridCircles extends InputAdapter {
         for (LineShape line : ColorChecker.getLines()) {
             line.render(renderer);
         }
+        if (currentState == GameState.GAMEOVER) {
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            renderer.begin();
+            renderer.set(ShapeRenderer.ShapeType.Filled);
+            renderer.setColor(new Color(0, 0, 0, 0.6f));
+            renderer.rect(0, 0, Constants.screenWidth, Constants.screenHeight);
+            renderer.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+        }
     }
+
+    public enum GameState {
+        MENU, READY, RUNNING, GAMEOVER, HIGHSCORE
+    }
+
+
 }
