@@ -14,9 +14,11 @@ Todo:
 1-Add algorthim for colors randomness
 *2-Add Difficulty
 3-Add HUD and score
-4-Add GameOver
+*4-Add GameOver
+4a- Add restart option
 5-Add Leaderboard
 6-Pick the color for the player and then transtion to another color and maybe another shape.
+7- Polishing - transiotins and animation
  */
 public class GameScreen extends ScreenAdapter {
     Constants.Difficulty difficulty;

@@ -37,4 +37,9 @@ public class ColorChecker {
         }
         return false;
     }
+
+    public static void clearAll() {
+        colors.clear();
+        postions.clear();
+    }
 }

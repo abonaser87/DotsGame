@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -22,6 +21,8 @@ import java.util.Random;
  * Created by 84170 on 05/01/2016.
  */
 public class GridCircles extends InputAdapter {
+    int score = 0;
+    int topScore = 4;
     private Constants.Difficulty difficulty;
     private Array<Color> colors = new Array<Color>();
     private Random rand = new Random();
@@ -33,6 +34,7 @@ public class GridCircles extends InputAdapter {
     private GameState currentState;
     private BitmapFont font;
     private SpriteBatch batch;
+
     public GridCircles(FitViewport viewport, Constants.Difficulty difficulty) {
         // TODO : ADD MENU
         currentState = GameState.RUNNING;
@@ -47,7 +49,7 @@ public class GridCircles extends InputAdapter {
         xStep = Constants.screenWidth / difficulty.coloumns;
         createGrid(Constants.rows, -Constants.screenHeight, new Vector2(0, -50));
         font = new BitmapFont(Gdx.files.internal("data/modenine.fnt"));
-        font.getData().setScale(Constants.DIFFICULTY_LABEL_SCALE);
+        font.getData().setScale(Constants.DIFFICULTY_LABEL_SCALE / 2);
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
 
@@ -83,6 +85,8 @@ public class GridCircles extends InputAdapter {
     }
 
     private void gameOver(float delta, FitViewport viewport) {
+        System.out.println(score);
+        if (topScore < score) topScore = score;
 
     }
 
@@ -124,22 +128,40 @@ public class GridCircles extends InputAdapter {
             if (worldClick.dst(x.getPosition()) < Constants.radius) {
                 ColorChecker.addColor(x.getColor(), x.getPosition());
                 if (ColorChecker.isMatching()) {
+                    score += 1;
                     System.out.println("Matched");
                 } else {
+                    if (score > 0) score -= 1;
                     System.out.println("No match");
                 }
             }
         }
+        if (currentState == GameState.GAMEOVER) {
+            restart();
+        }
         return true;
     }
 
+    private void restart() {
+        circle.clear();
+        ColorChecker.clearAll();
+        score = 0;
+        currentState = GameState.RUNNING;
+        createGrid(Constants.rows, -Constants.screenHeight, new Vector2(0, -50));
+    }
+
     public void render(ShapeRenderer renderer, float delta) {
+
         for (CirclesClient x : circle) {
             x.render(renderer);
         }
         for (LineShape line : ColorChecker.getLines()) {
             line.render(renderer);
         }
+        batch.begin();
+        font.setColor(Color.BLACK);
+        font.draw(batch, String.valueOf(score), Constants.screenWidth - xStep / 8, Constants.screenHeight - xStep / 8, 0, Align.center, false);
+        batch.end();
         if (currentState == GameState.GAMEOVER) {
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -148,13 +170,20 @@ public class GridCircles extends InputAdapter {
             renderer.setColor(new Color(0, 0, 0, 0.6f));
             renderer.rect(0, 0, Constants.screenWidth, Constants.screenHeight);
             renderer.end();
+
             batch.begin();
-            final GlyphLayout easyLayout = new GlyphLayout(font, Constants.EASY_LABEL);
-            font.setColor(Color.BLACK);
-            font.draw(batch, "Game Over", Constants.screenWidth / 2, Constants.screenHeight / 2 + easyLayout.height / 2, 0, Align.center, false);
+            font.setColor(Color.WHITE);
+            font.draw(batch, "Game Over", Constants.screenWidth / 2, Constants.screenHeight / 2 + Constants.yStep, 0, Align.center, false);
+
+            font.setColor(Color.WHITE);
+            font.draw(batch, "Connected Dots:" + String.valueOf(score), Constants.screenWidth / 2, Constants.screenHeight / 2, 0, Align.center, false);
+
+            font.setColor(Color.WHITE);
+            font.draw(batch, "Highest Score:" + String.valueOf(topScore), Constants.screenWidth / 2, Constants.screenHeight / 2 - Constants.yStep, 0, Align.center, false);
             batch.end();
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }
+
     }
 
     public enum GameState {
