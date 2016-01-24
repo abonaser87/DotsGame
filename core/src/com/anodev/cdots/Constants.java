@@ -8,14 +8,14 @@ import com.badlogic.gdx.math.Vector2;
  * Created by abdullah on 1/8/16.
  */
 public class Constants {
+    public static final int screenWidth = Gdx.graphics.getWidth();
+    public static final int screenHeight = Gdx.graphics.getHeight();
+
     public static final int rows = 9;
     public static final float radius = 1.0f / 12 * Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth());
     public static final float SPEED = 10.0f;
     public static final int SEGMENTS = 500;
-    public static final float MAX_SPEED = 100.0f;
-
-    public static final int screenWidth = Gdx.graphics.getWidth();
-    public static final int screenHeight = Gdx.graphics.getHeight();
+    public static final float MAX_SPEED = 0.25f * screenHeight;
 
     public static final float yStep = screenHeight / 7.0f;
 

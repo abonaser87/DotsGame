@@ -10,7 +10,7 @@ public class DotsGame extends Game {
 		showDifficultyScreen();
 	}
 
-	private void showDifficultyScreen() {
+	public void showDifficultyScreen() {
 		setScreen(new DifficultyScreen(this));
 	}
 

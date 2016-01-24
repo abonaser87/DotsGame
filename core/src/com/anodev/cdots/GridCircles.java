@@ -34,10 +34,11 @@ public class GridCircles extends InputAdapter {
     private GameState currentState;
     private BitmapFont font;
     private SpriteBatch batch;
-
+    private DotsGame test;
     public GridCircles(FitViewport viewport, Constants.Difficulty difficulty) {
         // TODO : ADD MENU
-        currentState = GameState.RUNNING;
+        test = new DotsGame();
+        currentState = GameState.GAMEOVER;
         batch = new SpriteBatch();
         this.viewport = viewport;
         this.difficulty = difficulty;
@@ -49,7 +50,7 @@ public class GridCircles extends InputAdapter {
         xStep = Constants.screenWidth / difficulty.coloumns;
         createGrid(Constants.rows, -Constants.screenHeight, new Vector2(0, -50));
         font = new BitmapFont(Gdx.files.internal("data/modenine.fnt"));
-        font.getData().setScale(Constants.DIFFICULTY_LABEL_SCALE / 2);
+        font.getData().setScale(Constants.DIFFICULTY_LABEL_SCALE / 1.5f);
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
 
@@ -70,6 +71,7 @@ public class GridCircles extends InputAdapter {
     }
 
     public void update(float delta, FitViewport viewport) {
+        // Make a seprate class to handel the screens and states
         switch (currentState) {
 
             case RUNNING:
@@ -85,9 +87,7 @@ public class GridCircles extends InputAdapter {
     }
 
     private void gameOver(float delta, FitViewport viewport) {
-        System.out.println(score);
         if (topScore < score) topScore = score;
-
     }
 
     private void updateRunning(float delta, FitViewport viewport) {
@@ -132,12 +132,18 @@ public class GridCircles extends InputAdapter {
                     System.out.println("Matched");
                 } else {
                     if (score > 0) score -= 1;
+                    // Screen feedback that the choice was wrong ?
                     System.out.println("No match");
                 }
             }
         }
         if (currentState == GameState.GAMEOVER) {
-            restart();
+            if (worldClick.dst(new Vector2(xStep, Constants.screenHeight / 2 - Constants.yStep / 2)) < Constants.radius) {
+                restart();
+            }
+            if (worldClick.dst(new Vector2(xStep * 2, Constants.screenHeight / 2 - Constants.yStep / 2)) < Constants.radius) {
+                test.showDifficultyScreen();
+            }
         }
         return true;
     }
@@ -173,13 +179,11 @@ public class GridCircles extends InputAdapter {
 
             batch.begin();
             font.setColor(Color.WHITE);
-            font.draw(batch, "Game Over", Constants.screenWidth / 2, Constants.screenHeight / 2 + Constants.yStep, 0, Align.center, false);
-
-            font.setColor(Color.WHITE);
+            font.draw(batch, "Game Over", Constants.screenWidth / 2, Constants.screenHeight / 2 + Constants.yStep / 8, 0, Align.center, false);
             font.draw(batch, "Connected Dots:" + String.valueOf(score), Constants.screenWidth / 2, Constants.screenHeight / 2, 0, Align.center, false);
-
-            font.setColor(Color.WHITE);
-            font.draw(batch, "Highest Score:" + String.valueOf(topScore), Constants.screenWidth / 2, Constants.screenHeight / 2 - Constants.yStep, 0, Align.center, false);
+            font.draw(batch, "Highest Score:" + String.valueOf(topScore), Constants.screenWidth / 2, Constants.screenHeight / 2 - Constants.yStep / 8, 0, Align.center, false);
+            font.draw(batch, "Restart", xStep, Constants.screenHeight / 2 - Constants.yStep / 2, 0, Align.center, false);
+            font.draw(batch, "Main Menu", xStep * 2, Constants.screenHeight / 2 - Constants.yStep / 2, 0, Align.center, false);
             batch.end();
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }
