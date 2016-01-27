@@ -41,5 +41,6 @@ public class ColorChecker {
     public static void clearAll() {
         colors.clear();
         postions.clear();
+        lines.clear();
     }
 }

@@ -191,7 +191,7 @@ public class GridCircles extends InputAdapter {
     }
 
     public enum GameState {
-        MENU, READY, RUNNING, GAMEOVER, HIGHSCORE
+        MENU, READY, RUNNING, GAMEOVER
     }
 
 
