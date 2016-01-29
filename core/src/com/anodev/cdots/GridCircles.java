@@ -11,27 +11,23 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-
-import java.util.Random;
 
 
 /**
  * Created by 84170 on 05/01/2016.
  */
 public class GridCircles extends InputAdapter {
-    // TODO : Seprate Color logic out from grid circles
     // TODO : Seperate The world logic from gridCircles?
     // TODO : Menu Screen
+    // TODO : color spawn algorthim
 
     private static Preferences prefs;
     int score = 0;
     int topScore = 0;
     private Constants.Difficulty difficulty;
-    private Array<Color> colors = new Array<Color>();
-    private Random rand = new Random();
+    private ColorPicker color;
     private DelayedRemovalArray<CirclesClient> circle;
     private FitViewport viewport;
     private CirclesClient x;
@@ -45,20 +41,20 @@ public class GridCircles extends InputAdapter {
     public GridCircles(FitViewport viewport, Constants.Difficulty difficulty, DotsGame game) {
         // TODO : ADD MENU
         this.game = game;
-        currentState = GameState.GAMEOVER;
-        batch = new SpriteBatch();
         this.viewport = viewport;
         this.difficulty = difficulty;
+        color = new ColorPicker();
+        currentState = GameState.RUNNING;
+        batch = new SpriteBatch();
         circle = new DelayedRemovalArray<CirclesClient>();
-        colors.add(Color.valueOf("#4d5b73ff"));
-        colors.add(Color.valueOf("#8a3c42ff"));
-        colors.add(Color.valueOf("#a39b8fff"));
         Gdx.input.setInputProcessor(this);
+
         xStep = Constants.screenWidth / difficulty.coloumns;
         createGrid(Constants.rows, -Constants.screenHeight, new Vector2(0, -50));
         font = new BitmapFont(Gdx.files.internal("data/modenine.fnt"));
         font.getData().setScale(Constants.DIFFICULTY_LABEL_SCALE / 1.5f);
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
         prefs = Gdx.app.getPreferences("CDots");
         if (!prefs.contains("highScore")) {
             prefs.putInteger("highScore", 0);
@@ -84,7 +80,7 @@ public class GridCircles extends InputAdapter {
     }
 
     private void createCircle(float xOffset, float yOffset, Vector2 velocity) {
-        x = new CirclesClient(xOffset, yOffset, colors.get(rand.nextInt(difficulty.coloumns - 1)), viewport);
+        x = new CirclesClient(xOffset, yOffset, color.getRandColor(difficulty.coloumns), viewport);
         x.setVelocity(velocity);
         circle.add(x);
     }
