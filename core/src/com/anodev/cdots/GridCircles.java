@@ -2,6 +2,7 @@ package com.anodev.cdots;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,8 +22,13 @@ import java.util.Random;
  * Created by 84170 on 05/01/2016.
  */
 public class GridCircles extends InputAdapter {
+    // TODO : Seprate Color logic out from grid circles
+    // TODO : Seperate The world logic from gridCircles?
+    // TODO : Menu Screen
+
+    private static Preferences prefs;
     int score = 0;
-    int topScore = 4;
+    int topScore = 0;
     private Constants.Difficulty difficulty;
     private Array<Color> colors = new Array<Color>();
     private Random rand = new Random();
@@ -34,10 +40,11 @@ public class GridCircles extends InputAdapter {
     private GameState currentState;
     private BitmapFont font;
     private SpriteBatch batch;
-    private DotsGame test;
-    public GridCircles(FitViewport viewport, Constants.Difficulty difficulty) {
+    private DotsGame game;
+
+    public GridCircles(FitViewport viewport, Constants.Difficulty difficulty, DotsGame game) {
         // TODO : ADD MENU
-        test = new DotsGame();
+        this.game = game;
         currentState = GameState.GAMEOVER;
         batch = new SpriteBatch();
         this.viewport = viewport;
@@ -52,6 +59,18 @@ public class GridCircles extends InputAdapter {
         font = new BitmapFont(Gdx.files.internal("data/modenine.fnt"));
         font.getData().setScale(Constants.DIFFICULTY_LABEL_SCALE / 1.5f);
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        prefs = Gdx.app.getPreferences("CDots");
+        if (!prefs.contains("highScore")) {
+            prefs.putInteger("highScore", 0);
+        } else {
+            topScore = prefs.getInteger("highScore");
+        }
+
+    }
+
+    public static void setHighScore(int val) {
+        prefs.putInteger("highScore", val);
+        prefs.flush();
     }
 
     private void createGrid(int rows, float offset, Vector2 velocity) {
@@ -88,6 +107,7 @@ public class GridCircles extends InputAdapter {
 
     private void gameOver(float delta, FitViewport viewport) {
         if (topScore < score) topScore = score;
+        setHighScore(topScore);
     }
 
     private void updateRunning(float delta, FitViewport viewport) {
@@ -142,7 +162,8 @@ public class GridCircles extends InputAdapter {
                 restart();
             }
             if (worldClick.dst(new Vector2(xStep * 2, Constants.screenHeight / 2 - Constants.yStep / 2)) < Constants.radius) {
-                test.showDifficultyScreen();
+                restart();
+                game.showDifficultyScreen();
             }
         }
         return true;
@@ -193,6 +214,4 @@ public class GridCircles extends InputAdapter {
     public enum GameState {
         MENU, READY, RUNNING, GAMEOVER
     }
-
-
 }
