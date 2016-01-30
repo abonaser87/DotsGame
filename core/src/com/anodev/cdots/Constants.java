@@ -2,6 +2,7 @@ package com.anodev.cdots;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -46,7 +47,10 @@ public class Constants {
     public static final Vector2 MEDIUM_CENTER = new Vector2(screenWidth / 2, screenHeight / 2);
     public static final Vector2 HARD_CENTER = new Vector2(screenWidth * 3 / 4, screenHeight / 2);
 
-
+    public static void setBG() {
+        Gdx.gl.glClearColor(245.0f / 255.0f, 233.0f / 255.0f, 208.0f / 255.0f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    }
     public enum Difficulty {
         EASY(EASY_COLOUMNS, EASY_LABEL),
         MEDIUM(MEDIUM_COLOUMNS, MEDIUM_LABEL),

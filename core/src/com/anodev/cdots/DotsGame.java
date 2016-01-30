@@ -7,7 +7,11 @@ public class DotsGame extends Game {
 	
 	@Override
 	public void create () {
-		showDifficultyScreen();
+		showMainMenu();
+	}
+
+	private void showMainMenu() {
+		setScreen(new MainMenu(this));
 	}
 
 	public void showDifficultyScreen() {
