@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
  */
 public class Circles {
 
+    public Color getColor() {
+        return color;
+    }
+
     private Color color;
 
     public Circles(Color color) {

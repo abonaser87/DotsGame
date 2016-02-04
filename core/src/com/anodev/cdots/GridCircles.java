@@ -33,7 +33,8 @@ public class GridCircles extends InputAdapter {
     private BitmapFont font;
     private SpriteBatch batch;
     private DotsGame game;
-
+    private Circles chosenColor;
+    private ColorChecker checker;
     public GridCircles(FitViewport viewport, Constants.Difficulty difficulty, DotsGame game) {
         this.game = game;
         this.viewport = viewport;
@@ -49,7 +50,9 @@ public class GridCircles extends InputAdapter {
         font = new BitmapFont(Gdx.files.internal("data/modenine.fnt"));
         font.getData().setScale(Constants.DIFFICULTY_LABEL_SCALE / 1.5f);
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
+        chosenColor = new Circles(color.getRandColor(difficulty.coloumns));
+        checker = new ColorChecker();
+        checker.setMainColor(chosenColor.getColor());
         prefs = Gdx.app.getPreferences("CDots");
         if (!prefs.contains("highScore")) {
             prefs.putInteger("highScore", 0);
@@ -85,6 +88,7 @@ public class GridCircles extends InputAdapter {
         switch (currentState) {
 
             case RUNNING:
+                
                 updateRunning(delta, viewport);
                 break;
             case GAMEOVER:
@@ -106,8 +110,8 @@ public class GridCircles extends InputAdapter {
             CirclesClient x = circle.get(i);
             x.update(delta);
         }
-        if (ColorChecker.getLines().size > 0) {
-            if (ColorChecker.getLines().get(ColorChecker.getLines().size - 1).isNotInScreen()) {
+        if (checker.getLines().size > 0) {
+            if (checker.getLines().get(checker.getLines().size - 1).isNotInScreen()) {
                 currentState = GameState.GAMEOVER;
                 System.out.println("Line out Game OVer");
             }
@@ -124,10 +128,10 @@ public class GridCircles extends InputAdapter {
             }
         }
         circle.end();
-        for (int i = 0; i < ColorChecker.getLines().size; i++) {
-            LineShape x = ColorChecker.getLines().get(i);
+        for (int i = 0; i < checker.getLines().size; i++) {
+            LineShape x = checker.getLines().get(i);
             if (x.isNotInScreen()) {
-                ColorChecker.getLines().removeIndex(i);
+                checker.getLines().removeIndex(i);
             }
         }
     }
@@ -137,8 +141,8 @@ public class GridCircles extends InputAdapter {
         Vector2 worldClick = viewport.unproject(new Vector2(screenX, screenY));
         for (CirclesClient x : circle) {
             if (worldClick.dst(x.getPosition()) < Constants.radius) {
-                ColorChecker.addColor(x.getColor(), x.getPosition());
-                if (ColorChecker.isMatching()) {
+                checker.addColor(x.getColor(), x.getPosition());
+                if (checker.isMatching()) {
                     score += 1;
                     System.out.println("Matched");
                 } else {
@@ -162,7 +166,7 @@ public class GridCircles extends InputAdapter {
 
     private void restart() {
         circle.clear();
-        ColorChecker.clearAll();
+        checker.clearAll();
         score = 0;
         currentState = GameState.RUNNING;
         createGrid(Constants.rows, -Constants.screenHeight, new Vector2(0, -50));
@@ -173,13 +177,14 @@ public class GridCircles extends InputAdapter {
         for (CirclesClient x : circle) {
             x.render(renderer);
         }
-        for (LineShape line : ColorChecker.getLines()) {
+        for (LineShape line : checker.getLines()) {
             line.render(renderer);
         }
         batch.begin();
         font.setColor(Color.BLACK);
         font.draw(batch, String.valueOf(score), Constants.screenWidth - xStep / 8, Constants.screenHeight - xStep / 8, 0, Align.center, false);
         batch.end();
+        chosenColor.render(xStep / 8, Constants.screenHeight - xStep / 8,Constants.radius/4 ,Constants.SEGMENTS,renderer);
         if (currentState == GameState.GAMEOVER) {
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);

@@ -12,19 +12,31 @@ public class ColorChecker {
     private static final Array<Vector2> postions = new Array<Vector2>();
     private static final Array<LineShape> lines = new Array<LineShape>();
     private static LineShape connecter;
+    private static Color mainColor;
+    public Color getMainColor() {
+        return mainColor;
+    }
+
+    public void setMainColor(Color mainColor) {
+        this.mainColor = mainColor;
+    }
+
 
     public static Array<LineShape> getLines() {
         return lines;
     }
 
     public static void addColor(Color color, Vector2 postion) {
-        colors.add(color);
-        postions.add(postion);
+        if(color.equals(mainColor)) {
+            colors.add(color);
+            postions.add(postion);
+        }
     }
     public static boolean isMatching() {
+
         if (colors.size > 1) {
-            if (colors.get(0).equals(colors.get(colors.size - 1))) {
-                connecter = new LineShape(colors.get(0), postions.get(0), postions.get(postions.size - 1));
+            if (colors.get(colors.size - 1).equals(mainColor)) {
+                connecter = new LineShape(colors.get(colors.size - 1), postions.get(0), postions.get(postions.size - 1));
                 lines.add(connecter);
                 postions.removeIndex(0);
                 colors.removeIndex(colors.size - 1);
