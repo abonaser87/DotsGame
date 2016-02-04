@@ -10,7 +10,7 @@ public class DotsGame extends Game {
 		showMainMenu();
 	}
 
-	private void showMainMenu() {
+	public void showMainMenu() {
 		setScreen(new MainMenu(this));
 	}
 

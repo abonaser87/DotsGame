@@ -19,10 +19,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  * Created by 84170 on 05/01/2016.
  */
 public class GridCircles extends InputAdapter {
-    // TODO : Seperate The world logic from gridCircles?
-    // TODO : Menu Screen
-    // TODO : color spawn algorthim
-
     private static Preferences prefs;
     int score = 0;
     int topScore = 0;
@@ -39,7 +35,6 @@ public class GridCircles extends InputAdapter {
     private DotsGame game;
 
     public GridCircles(FitViewport viewport, Constants.Difficulty difficulty, DotsGame game) {
-        // TODO : ADD MENU
         this.game = game;
         this.viewport = viewport;
         this.difficulty = difficulty;
@@ -159,7 +154,7 @@ public class GridCircles extends InputAdapter {
             }
             if (worldClick.dst(new Vector2(xStep * 2, Constants.screenHeight / 2 - Constants.yStep / 2)) < Constants.radius) {
                 restart();
-                game.showDifficultyScreen();
+                game.showMainMenu();
             }
         }
         return true;
@@ -199,8 +194,8 @@ public class GridCircles extends InputAdapter {
             font.draw(batch, "Game Over", Constants.screenWidth / 2, Constants.screenHeight / 2 + Constants.yStep / 8, 0, Align.center, false);
             font.draw(batch, "Connected Dots:" + String.valueOf(score), Constants.screenWidth / 2, Constants.screenHeight / 2, 0, Align.center, false);
             font.draw(batch, "Highest Score:" + String.valueOf(topScore), Constants.screenWidth / 2, Constants.screenHeight / 2 - Constants.yStep / 8, 0, Align.center, false);
-            font.draw(batch, "Restart", xStep, Constants.screenHeight / 2 - Constants.yStep / 2, 0, Align.center, false);
-            font.draw(batch, "Main Menu", xStep * 2, Constants.screenHeight / 2 - Constants.yStep / 2, 0, Align.center, false);
+            font.draw(batch, "Restart", Constants.screenWidth / 3, Constants.screenHeight / 2 - Constants.yStep / 2, 0, Align.center, false);
+            font.draw(batch, "Main Menu", Constants.screenWidth / 2 +xStep, Constants.screenHeight / 2 - Constants.yStep / 2, 0, Align.center, false);
             batch.end();
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }

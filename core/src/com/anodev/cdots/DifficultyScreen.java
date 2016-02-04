@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -18,7 +17,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  */
 public class DifficultyScreen extends InputAdapter implements Screen {
     DotsGame game;
-    ShapeRenderer renderer;
     SpriteBatch batch;
     FitViewport viewport;
 
@@ -31,7 +29,6 @@ public class DifficultyScreen extends InputAdapter implements Screen {
 
     @Override
     public void show() {
-        renderer = new ShapeRenderer();
         batch = new SpriteBatch();
 
         viewport = new FitViewport(Constants.screenWidth, Constants.screenHeight);
@@ -46,23 +43,6 @@ public class DifficultyScreen extends InputAdapter implements Screen {
     public void render(float delta) {
         viewport.apply();
         Constants.setBG();
-
-        renderer.setProjectionMatrix(viewport.getCamera().combined);
-
-
-        renderer.begin(ShapeRenderer.ShapeType.Line);
-
-        renderer.setColor(Constants.EASY_COLOR);
-        renderer.circle(Constants.EASY_CENTER.x, Constants.EASY_CENTER.y, Constants.DIFFICULTY_BUBBLE_RADIUS);
-
-        renderer.setColor(Constants.MEDIUM_COLOR);
-        renderer.circle(Constants.MEDIUM_CENTER.x, Constants.MEDIUM_CENTER.y, Constants.DIFFICULTY_BUBBLE_RADIUS);
-
-        renderer.setColor(Constants.HARD_COLOR);
-        renderer.circle(Constants.HARD_CENTER.x, Constants.HARD_CENTER.y, Constants.DIFFICULTY_BUBBLE_RADIUS);
-
-        renderer.end();
-
 
         batch.setProjectionMatrix(viewport.getCamera().combined);
 
@@ -100,7 +80,6 @@ public class DifficultyScreen extends InputAdapter implements Screen {
     public void hide() {
         batch.dispose();
         font.dispose();
-        renderer.dispose();
     }
 
     @Override
