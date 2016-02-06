@@ -3,9 +3,10 @@ package com.anodev.cdots;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -13,68 +14,74 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.alpha;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveBy;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.parallel;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 /**
- * Created by abdullah on 1/30/16.
+ * Created by abdullah on 2/5/16.
  */
-public class MainMenu extends InputAdapter implements Screen {
+public class GameOverScreen extends InputAdapter implements Screen {
     DotsGame game;
     FitViewport viewport;
 
     private Skin skin;
     private Stage stage;
     private Table table;
-    private TextButton playBtn;
-    private TextButton ldrBtn;
-    private TextButton crdtBtn;
+    private TextButton rstBtn;
+    private TextButton mnuBtn;
+    private Label currentScore;
+    private Label highScore;
+    private int score;
+    private int topScore;
+    private Constants.Difficulty difficulty;
+    ShapeRenderer renderer;
 
-
-    public MainMenu(DotsGame game) {
+    public GameOverScreen(DotsGame game, int score, int topScore, Constants.Difficulty difficulty) {
         this.game = game;
+        this.difficulty = difficulty;
+        this.score = score;
+        this.topScore = topScore;
+        renderer = new ShapeRenderer();
         viewport = new FitViewport(Constants.screenWidth, Constants.screenHeight);
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         this.stage = new Stage(viewport);
-        table = new Table();
+        this.table = new Table();
     }
 
     @Override
     public void show() {
-
         Gdx.input.setInputProcessor(stage);
+        init();
+        System.out.print("Gameover screen");
+    }
+
+    private void init() {
         table.setWidth(stage.getWidth());
         table.align(Align.center | Align.center);
-        table.setPosition(0,Constants.screenHeight/2);
-
-        playBtn = new TextButton("Play",skin,"default");
-        playBtn.addAction(sequence(alpha(0), parallel(fadeIn(.5f), moveBy(0, -20, .5f, Interpolation.pow5Out))));
-        playBtn.addListener(new ClickListener() {
+        table.setPosition(0, Constants.screenHeight / 2);
+        rstBtn = new TextButton("Restart", skin);
+        rstBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.showDifficultyScreen();
-                System.out.println("Clicked");
+                game.showGameScreen(difficulty);
             }
         });
-        ldrBtn = new TextButton("Leaderboards",skin);
-        ldrBtn.addAction(sequence(alpha(0), parallel(fadeIn(.5f), moveBy(0, -20, .5f, Interpolation.pow5Out))));
-        crdtBtn = new TextButton("Credits",skin);
-        crdtBtn.addAction(sequence(alpha(0), parallel(fadeIn(.5f), moveBy(0, -20, .5f, Interpolation.pow5Out))));
-
-        table.add(playBtn).padBottom(50);
-        table.row();
-        table.add(ldrBtn).padBottom(50);
-        table.row();
-        table.add(crdtBtn);
+        mnuBtn = new TextButton("Main Menu", skin);
+        mnuBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.showMainMenu();
+            }
+        });
+        currentScore = new Label("Connected Dots: " + String.valueOf(score), skin);
+        highScore = new Label("High Score: " + String.valueOf(topScore), skin);
+        table.defaults().padBottom(25);
+        table.add(currentScore).row();
+        table.add(highScore).row();
+        table.add(rstBtn).row();
+        table.add(mnuBtn);
         stage.addActor(table);
-
     }
 
     @Override
     public void render(float delta) {
-        viewport.apply();
         Constants.setBG();
         stage.act(delta);
         stage.draw();
@@ -102,6 +109,7 @@ public class MainMenu extends InputAdapter implements Screen {
 
     @Override
     public void dispose() {
+        renderer.dispose();
         stage.dispose();
     }
 }

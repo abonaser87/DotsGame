@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -40,7 +39,7 @@ public class GridCircles extends InputAdapter {
         this.viewport = viewport;
         this.difficulty = difficulty;
         color = new ColorPicker();
-        currentState = GameState.RUNNING;
+        currentState = GameState.GAMEOVER;
         batch = new SpriteBatch();
         circle = new DelayedRemovalArray<CirclesClient>();
         Gdx.input.setInputProcessor(this);
@@ -103,6 +102,7 @@ public class GridCircles extends InputAdapter {
     private void gameOver(float delta, FitViewport viewport) {
         if (topScore < score) topScore = score;
         setHighScore(topScore);
+        game.setScreen(new GameOverScreen(game, score, topScore, difficulty));
     }
 
     private void updateRunning(float delta, FitViewport viewport) {
@@ -152,15 +152,6 @@ public class GridCircles extends InputAdapter {
                 }
             }
         }
-        if (currentState == GameState.GAMEOVER) {
-            if (worldClick.dst(new Vector2(xStep, Constants.screenHeight / 2 - Constants.yStep / 2)) < Constants.radius) {
-                restart();
-            }
-            if (worldClick.dst(new Vector2(xStep * 2, Constants.screenHeight / 2 - Constants.yStep / 2)) < Constants.radius) {
-                restart();
-                game.showMainMenu();
-            }
-        }
         return true;
     }
 
@@ -173,7 +164,7 @@ public class GridCircles extends InputAdapter {
     }
 
     public void render(ShapeRenderer renderer, float delta) {
-
+        renderer.setAutoShapeType(true);
         for (CirclesClient x : circle) {
             x.render(renderer);
         }
@@ -184,26 +175,7 @@ public class GridCircles extends InputAdapter {
         font.setColor(Color.BLACK);
         font.draw(batch, String.valueOf(score), Constants.screenWidth - xStep / 8, Constants.screenHeight - xStep / 8, 0, Align.center, false);
         batch.end();
-        chosenColor.render(xStep / 8, Constants.screenHeight - xStep / 8,Constants.radius/4 ,Constants.SEGMENTS,renderer);
-        if (currentState == GameState.GAMEOVER) {
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-            renderer.begin();
-            renderer.set(ShapeRenderer.ShapeType.Filled);
-            renderer.setColor(new Color(0, 0, 0, 0.6f));
-            renderer.rect(0, 0, Constants.screenWidth, Constants.screenHeight);
-            renderer.end();
-
-            batch.begin();
-            font.setColor(Color.WHITE);
-            font.draw(batch, "Game Over", Constants.screenWidth / 2, Constants.screenHeight / 2 + Constants.yStep / 8, 0, Align.center, false);
-            font.draw(batch, "Connected Dots:" + String.valueOf(score), Constants.screenWidth / 2, Constants.screenHeight / 2, 0, Align.center, false);
-            font.draw(batch, "Highest Score:" + String.valueOf(topScore), Constants.screenWidth / 2, Constants.screenHeight / 2 - Constants.yStep / 8, 0, Align.center, false);
-            font.draw(batch, "Restart", Constants.screenWidth / 3, Constants.screenHeight / 2 - Constants.yStep / 2, 0, Align.center, false);
-            font.draw(batch, "Main Menu", Constants.screenWidth / 2 +xStep, Constants.screenHeight / 2 - Constants.yStep / 2, 0, Align.center, false);
-            batch.end();
-            Gdx.gl.glDisable(GL20.GL_BLEND);
-        }
+        chosenColor.render(xStep / 8, Constants.screenHeight - xStep / 8, Constants.radius / 4, Constants.SEGMENTS, renderer);
 
     }
 
