@@ -39,7 +39,7 @@ public class GridCircles extends InputAdapter {
         this.viewport = viewport;
         this.difficulty = difficulty;
         color = new ColorPicker();
-        currentState = GameState.GAMEOVER;
+        currentState = GameState.RUNNING;
         batch = new SpriteBatch();
         circle = new DelayedRemovalArray<CirclesClient>();
         Gdx.input.setInputProcessor(this);
@@ -49,7 +49,7 @@ public class GridCircles extends InputAdapter {
         font = new BitmapFont(Gdx.files.internal("data/modenine.fnt"));
         font.getData().setScale(Constants.DIFFICULTY_LABEL_SCALE / 1.5f);
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        chosenColor = new Circles(color.getRandColor(difficulty.coloumns));
+        chosenColor = new Circles(color.getRandColor(difficulty.coloumns, -1));
         checker = new ColorChecker();
         checker.setMainColor(chosenColor.getColor());
         prefs = Gdx.app.getPreferences("CDots");
@@ -71,13 +71,13 @@ public class GridCircles extends InputAdapter {
             for (int col = 1; col < difficulty.coloumns; col++) {
                 float xOffset = col * xStep;
                 float yOffset = Constants.yStep * row;
-                createCircle(xOffset, yOffset + offset, velocity);
+                createCircle(xOffset, yOffset + offset, velocity,row);
             }
         }
     }
 
-    private void createCircle(float xOffset, float yOffset, Vector2 velocity) {
-        x = new CirclesClient(xOffset, yOffset, color.getRandColor(difficulty.coloumns), viewport);
+    private void createCircle(float xOffset, float yOffset, Vector2 velocity, int row) {
+        x = new CirclesClient(xOffset, yOffset, color.getRandColor(difficulty.coloumns,row), viewport);
         x.setVelocity(velocity);
         circle.add(x);
     }
