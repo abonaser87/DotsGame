@@ -24,10 +24,12 @@ public class ColorPicker {
         colors.add(Color.valueOf("#a39b8fff"));
         colors.add(Color.valueOf("#545859ff"));
     }
-
     public Color getRandColor(int coloumns, int row) {
-        reduceColors(coloumns);
         if(oldrow == row){
+            if (colors.size < 1) {
+                addColors();
+            }
+            reduceColors(coloumns);
             tempRand = rand.nextInt(colors.size);
             tempColor = colors.get(tempRand);
             colors.removeIndex(tempRand);

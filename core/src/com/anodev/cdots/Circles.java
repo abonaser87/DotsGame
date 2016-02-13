@@ -12,6 +12,10 @@ public class Circles {
         return color;
     }
 
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     private Color color;
 
     public Circles(Color color) {

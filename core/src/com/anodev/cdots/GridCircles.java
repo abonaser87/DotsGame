@@ -102,6 +102,7 @@ public class GridCircles extends InputAdapter {
     private void gameOver(float delta, FitViewport viewport) {
         if (topScore < score) topScore = score;
         setHighScore(topScore);
+        restart();
         game.setScreen(new GameOverScreen(game, score, topScore, difficulty));
     }
 
@@ -128,12 +129,15 @@ public class GridCircles extends InputAdapter {
             }
         }
         circle.end();
+        checker.getLines().begin();
         for (int i = 0; i < checker.getLines().size; i++) {
             LineShape x = checker.getLines().get(i);
             if (x.isNotInScreen()) {
                 checker.getLines().removeIndex(i);
             }
         }
+        checker.getLines().end();
+
     }
 
     @Override
@@ -146,11 +150,22 @@ public class GridCircles extends InputAdapter {
                     score += 1;
                     System.out.println("Matched");
                 } else {
-                    if (score > 0) score -= 1;
+                    if (score > 0) {
+                        score -= 1;
+                    }
                     // Screen feedback that the choice was wrong ?
                     System.out.println("No match");
                 }
             }
+        }
+        if (score > 0 && score % 10 == 0) {
+            Color temp = color.getRandColor(difficulty.coloumns, -1);
+            while (temp.equals(chosenColor.getColor())) {
+                temp = color.getRandColor(difficulty.coloumns, -1);
+            }
+            chosenColor.setColor(temp);
+            checker.setMainColor(chosenColor.getColor());
+
         }
         return true;
     }
@@ -159,8 +174,8 @@ public class GridCircles extends InputAdapter {
         circle.clear();
         checker.clearAll();
         score = 0;
-        currentState = GameState.RUNNING;
-        createGrid(Constants.rows, -Constants.screenHeight, new Vector2(0, -50));
+//        currentState = GameState.RUNNING;
+//        createGrid(Constants.rows, -Constants.screenHeight, new Vector2(0, -50));
     }
 
     public void render(ShapeRenderer renderer, float delta) {

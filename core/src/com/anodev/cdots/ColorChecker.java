@@ -3,6 +3,7 @@ package com.anodev.cdots;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.DelayedRemovalArray;
 
 /**
  * Created by abdullah on 1/12/16.
@@ -10,7 +11,7 @@ import com.badlogic.gdx.utils.Array;
 public class ColorChecker {
     private static final Array<Color> colors = new Array<Color>();
     private static final Array<Vector2> postions = new Array<Vector2>();
-    private static final Array<LineShape> lines = new Array<LineShape>();
+    private static final DelayedRemovalArray<LineShape> lines = new DelayedRemovalArray<LineShape>();
     private static LineShape connecter;
     private static Color mainColor;
     public Color getMainColor() {
@@ -22,7 +23,7 @@ public class ColorChecker {
     }
 
 
-    public static Array<LineShape> getLines() {
+    public static DelayedRemovalArray<LineShape> getLines() {
         return lines;
     }
 
@@ -47,6 +48,7 @@ public class ColorChecker {
                 return false;
             }
         }
+        System.out.println(colors.size + postions.size);
         return false;
     }
 
