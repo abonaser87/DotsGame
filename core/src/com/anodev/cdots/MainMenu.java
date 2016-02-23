@@ -31,7 +31,7 @@ public class MainMenu extends InputAdapter implements Screen {
     private TextButton playBtn;
     private TextButton ldrBtn;
     private TextButton crdtBtn;
-
+    float unit_scale;
 
     public MainMenu(DotsGame game) {
         this.game = game;
@@ -39,6 +39,7 @@ public class MainMenu extends InputAdapter implements Screen {
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         this.stage = new Stage(viewport);
         table = new Table();
+        unit_scale = Gdx.graphics.getWidth() / 540;
     }
 
     @Override
@@ -62,12 +63,11 @@ public class MainMenu extends InputAdapter implements Screen {
         ldrBtn.addAction(sequence(alpha(0), parallel(fadeIn(.5f), moveBy(0, -20, .5f, Interpolation.pow5Out))));
         crdtBtn = new TextButton("Credits",skin);
         crdtBtn.addAction(sequence(alpha(0), parallel(fadeIn(.5f), moveBy(0, -20, .5f, Interpolation.pow5Out))));
-
-        table.add(playBtn).padBottom(50);
+        table.add(playBtn).width(playBtn.getWidth()* unit_scale).height(playBtn.getHeight()* unit_scale).padBottom(50);
         table.row();
-        table.add(ldrBtn).padBottom(50);
+        table.add(ldrBtn).width(ldrBtn.getWidth()* unit_scale).height(ldrBtn.getHeight()* unit_scale).padBottom(50);
         table.row();
-        table.add(crdtBtn);
+        table.add(crdtBtn).width(crdtBtn.getWidth()* unit_scale).height(crdtBtn.getHeight()* unit_scale);
         stage.addActor(table);
 
     }
