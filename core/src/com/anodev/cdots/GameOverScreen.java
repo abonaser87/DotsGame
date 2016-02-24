@@ -13,13 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 /**
  * Created by abdullah on 2/5/16.
  */
 public class GameOverScreen extends InputAdapter implements Screen {
     DotsGame game;
-    FitViewport viewport;
+    StretchViewport viewport;
 
     private Skin skin;
     private Stage stage;
@@ -39,7 +40,7 @@ public class GameOverScreen extends InputAdapter implements Screen {
         this.score = score;
         this.topScore = topScore;
         renderer = new ShapeRenderer();
-        viewport = new FitViewport(Constants.screenWidth, Constants.screenHeight);
+        viewport = new StretchViewport(Constants.menuwidth, Constants.menuHeight);
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         this.stage = new Stage(viewport);
         this.table = new Table();
@@ -49,13 +50,12 @@ public class GameOverScreen extends InputAdapter implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(stage);
         init();
-        System.out.print("Gameover screen");
     }
 
     private void init() {
         table.setWidth(stage.getWidth());
         table.align(Align.center | Align.center);
-        table.setPosition(0, Constants.screenHeight / 2);
+        table.setPosition(0, Constants.menuHeight/2);
         rstBtn = new TextButton("Restart", skin);
         rstBtn.addListener(new ClickListener() {
             @Override

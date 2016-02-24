@@ -11,7 +11,8 @@ import com.badlogic.gdx.math.Vector2;
 public class Constants {
     public static final int screenWidth = Gdx.graphics.getWidth();
     public static final int screenHeight = Gdx.graphics.getHeight();
-
+    public static final int menuHeight = 960;
+    public static final int menuwidth = 540;
     public static final int rows = 9;
     public static final float radius = 1.0f / 12 * Math.min(Gdx.graphics.getHeight(), Gdx.graphics.getWidth());
     public static final float SPEED = 10.0f;

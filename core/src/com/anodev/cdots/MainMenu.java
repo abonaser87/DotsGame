@@ -3,6 +3,7 @@ package com.anodev.cdots;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.alpha;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
@@ -23,7 +25,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
  */
 public class MainMenu extends InputAdapter implements Screen {
     DotsGame game;
-    FitViewport viewport;
+    StretchViewport viewport;
 
     private Skin skin;
     private Stage stage;
@@ -34,10 +36,14 @@ public class MainMenu extends InputAdapter implements Screen {
     float unit_scale;
 
     public MainMenu(DotsGame game) {
+
         this.game = game;
-        viewport = new FitViewport(Constants.screenWidth, Constants.screenHeight);
+        viewport = new StretchViewport(Constants.menuwidth, Constants.menuHeight);
+
+        viewport.apply();
         this.skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         this.stage = new Stage(viewport);
+
         table = new Table();
         unit_scale = Gdx.graphics.getWidth() / 540;
     }
@@ -47,8 +53,9 @@ public class MainMenu extends InputAdapter implements Screen {
 
         Gdx.input.setInputProcessor(stage);
         table.setWidth(stage.getWidth());
+
         table.align(Align.center | Align.center);
-        table.setPosition(0,Constants.screenHeight/2);
+        table.setPosition(0,Constants.menuHeight/2);
 
         playBtn = new TextButton("Play",skin,"default");
         playBtn.addAction(sequence(alpha(0), parallel(fadeIn(.5f), moveBy(0, -20, .5f, Interpolation.pow5Out))));
@@ -63,11 +70,11 @@ public class MainMenu extends InputAdapter implements Screen {
         ldrBtn.addAction(sequence(alpha(0), parallel(fadeIn(.5f), moveBy(0, -20, .5f, Interpolation.pow5Out))));
         crdtBtn = new TextButton("Credits",skin);
         crdtBtn.addAction(sequence(alpha(0), parallel(fadeIn(.5f), moveBy(0, -20, .5f, Interpolation.pow5Out))));
-        table.add(playBtn).width(playBtn.getWidth()* unit_scale).height(playBtn.getHeight()* unit_scale).padBottom(50);
+        table.add(playBtn).padBottom(50);
         table.row();
-        table.add(ldrBtn).width(ldrBtn.getWidth()* unit_scale).height(ldrBtn.getHeight()* unit_scale).padBottom(50);
+        table.add(ldrBtn).padBottom(50);
         table.row();
-        table.add(crdtBtn).width(crdtBtn.getWidth()* unit_scale).height(crdtBtn.getHeight()* unit_scale);
+        table.add(crdtBtn);
         stage.addActor(table);
 
     }
@@ -82,7 +89,7 @@ public class MainMenu extends InputAdapter implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        stage.getViewport().update(width,height,true);
     }
 
     @Override
