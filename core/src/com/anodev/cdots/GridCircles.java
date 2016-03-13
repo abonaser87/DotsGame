@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  */
 public class GridCircles extends InputAdapter {
     private static Preferences prefs;
-    int score = 0;
+    int score = 9;
     int topScore = 0;
     private Constants.Difficulty difficulty;
     private ColorPicker color;
