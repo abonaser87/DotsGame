@@ -63,7 +63,6 @@ public class MainMenu extends InputAdapter implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.showDifficultyScreen();
-                System.out.println("Clicked");
             }
         });
         ldrBtn = new TextButton("Leaderboards",skin);

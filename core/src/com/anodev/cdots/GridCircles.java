@@ -19,7 +19,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  */
 public class GridCircles extends InputAdapter {
     private static Preferences prefs;
-    int score = 9;
+    int score = 0;
+    int counter = 0;
     int topScore = 0;
     private Constants.Difficulty difficulty;
     private ColorPicker color;
@@ -77,7 +78,7 @@ public class GridCircles extends InputAdapter {
     }
 
     private void createCircle(float xOffset, float yOffset, Vector2 velocity, int row) {
-        x = new CirclesClient(xOffset, yOffset, color.getRandColor(difficulty.coloumns,row), viewport);
+        x = new CirclesClient(xOffset, yOffset, color.getRandColor(difficulty.coloumns,row), viewport,difficulty.speed);
         x.setVelocity(velocity);
         circle.add(x);
     }
@@ -114,7 +115,6 @@ public class GridCircles extends InputAdapter {
         if (checker.getLines().size > 0) {
             if (checker.getLines().get(checker.getLines().size - 1).isNotInScreen()) {
                 currentState = GameState.GAMEOVER;
-                System.out.println("Line out Game OVer");
             }
         }
         if (circle.get(circle.size - 1).isNotInScreen()) {
@@ -145,20 +145,19 @@ public class GridCircles extends InputAdapter {
         Vector2 worldClick = viewport.unproject(new Vector2(screenX, screenY));
         for (CirclesClient x : circle) {
             if (worldClick.dst(x.getPosition()) < Constants.radius) {
+                counter+=1;
                 checker.addColor(x.getColor(), x.getPosition());
                 if (checker.isMatching()) {
                     score += 1;
-                    System.out.println("Matched");
                 } else {
                     if (score > 0) {
                         score -= 1;
                     }
-                    // Screen feedback that the choice was wrong ?
-                    System.out.println("No match");
+                    // TODO: Screen feedback that the choice was wrong ?
                 }
             }
         }
-        if (score > 0 && score % 10 == 0) {
+        if (counter > 0 && counter % difficulty.colorChange == 0) {
             Color temp = color.getRandColor(difficulty.coloumns, -1);
             while (temp.equals(chosenColor.getColor())) {
                 temp = color.getRandColor(difficulty.coloumns, -1);
@@ -174,8 +173,7 @@ public class GridCircles extends InputAdapter {
         circle.clear();
         checker.clearAll();
         score = 0;
-//        currentState = GameState.RUNNING;
-//        createGrid(Constants.rows, -Constants.screenHeight, new Vector2(0, -50));
+        counter=0;
     }
 
     public void render(ShapeRenderer renderer, float delta) {
@@ -195,6 +193,6 @@ public class GridCircles extends InputAdapter {
     }
 
     public enum GameState {
-        MENU, READY, RUNNING, GAMEOVER
+        RUNNING, GAMEOVER
     }
 }
