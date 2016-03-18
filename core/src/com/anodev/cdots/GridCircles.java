@@ -21,6 +21,7 @@ public class GridCircles extends InputAdapter {
     private static Preferences prefs;
     int score = 0;
     int topScore = 0;
+    int colorcounter = 0;
     private Constants.Difficulty difficulty;
     private ColorPicker color;
     private DelayedRemovalArray<CirclesClient> circle;
@@ -148,6 +149,7 @@ public class GridCircles extends InputAdapter {
                 checker.addColor(x.getColor(), x.getPosition());
                 if (checker.isMatching()) {
                     score += 1;
+                    colorcounter++;
                     System.out.println("Matched");
                 } else {
                     if (score > 0) {
@@ -158,7 +160,7 @@ public class GridCircles extends InputAdapter {
                 }
             }
         }
-        if (score > 0 && score % 10 == 0) {
+        if (colorcounter > 0 && colorcounter % 10 == 0) {
             Color temp = color.getRandColor(difficulty.coloumns, -1);
             while (temp.equals(chosenColor.getColor())) {
                 temp = color.getRandColor(difficulty.coloumns, -1);
