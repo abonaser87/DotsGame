@@ -71,7 +71,7 @@ public class GridCircles extends InputAdapter {
             topScore = prefs.getInteger("highScore");
         }
         transitionColor = new Color();
-        prepareTransition(255, 255, 255, .5f);
+
     }
 
     public static void setHighScore(int val) {
@@ -115,8 +115,8 @@ public class GridCircles extends InputAdapter {
     private void gameOver(float delta, FitViewport viewport) {
         if (topScore < score) topScore = score;
         setHighScore(topScore);
-        restart();
         game.setScreen(new GameOverScreen(game, score, topScore, difficulty));
+        restart();
     }
 
     private void updateRunning(float delta, FitViewport viewport) {
@@ -199,24 +199,24 @@ public class GridCircles extends InputAdapter {
             line.render(renderer);
         }
         if (misClick) {
+            prepareTransition(77, 91, 115, 5f);
             drawTransition(delta, renderer);
-            misClick = false;
         }
         batch.begin();
         font.setColor(Color.BLACK);
-        font.draw(batch, String.valueOf(score), Constants.screenWidth - xStep / 8, Constants.screenHeight - xStep / 8, 0, Align.center, false);
+        font.draw(batch, String.valueOf(score), Constants.screenWidth - xStep / 8, Constants.screenHeight / 2 - xStep / 8, 0, Align.center, false);
         batch.end();
-        chosenColor.render(xStep / 8, Constants.screenHeight - xStep / 8, Constants.radius / 4, Constants.SEGMENTS, renderer);
+        chosenColor.render(xStep / 8, Constants.screenHeight / 2 - xStep / 8, Constants.radius / 4, Constants.SEGMENTS, renderer);
 
     }
 
     public void prepareTransition(int r, int g, int b, float duration) {
         transitionColor.set(r / 255.0f, g / 255.0f, b / 255.0f, 1);
-        alpha.setValue(1);
+        alpha.setValue(5);
         Tween.registerAccessor(Value.class, new ValueAccessor());
         manager = new TweenManager();
         Tween.to(alpha, -1, duration).target(0)
-                .ease(TweenEquations.easeOutQuad).start(manager);
+                .ease(TweenEquations.easeOutQuint).start(manager);
     }
 
     public void drawTransition(float delta, ShapeRenderer renderer) {
@@ -225,11 +225,11 @@ public class GridCircles extends InputAdapter {
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
             renderer.begin(ShapeRenderer.ShapeType.Filled);
-            renderer.setColor(1, 1, 1, alpha.getValue());
+            renderer.setColor(77.0f / 255.0f, 91.0f / 255.0f, 115.0f / 255.0f, alpha.getValue());
             renderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             renderer.end();
             Gdx.gl.glDisable(GL20.GL_BLEND);
-
+            misClick = false;
         }
     }
     public enum GameState {
