@@ -16,13 +16,14 @@ public class CirclesClient {
     private Vector2 position;
     private Vector2 velocity;
     private float speed;
+
     public CirclesClient(float xOffset, float yOffset, Color color, FitViewport viewport, float speed) {
         this.circle = CircleFactory.getCircle(color);
         this.position = new Vector2(xOffset, yOffset);
         this.velocity = new Vector2(0, 0);
         this.viewport = viewport;
         this.color = color;
-        this.speed=speed;
+        this.speed = speed;
     }
 
     public Color getColor() {

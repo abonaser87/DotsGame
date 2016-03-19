@@ -1,7 +1,6 @@
 package com.anodev.cdots;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 
@@ -51,20 +50,20 @@ public class Constants {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
     public enum Difficulty {
-        EASY(EASY_COLOUMNS, EASY_LABEL,EASY_SPEED,EASY_CHANGE),
-        MEDIUM(MEDIUM_COLOUMNS, MEDIUM_LABEL,MEDIUM_SPEED,MEDIUM_CHANGE),
-        HARD(HARD_COLOUMNS, HARD_LABEL,HARD_SPEED,HARD_CHANGE);
+        EASY(EASY_COLOUMNS, EASY_LABEL, EASY_SPEED, EASY_CHANGE),
+        MEDIUM(MEDIUM_COLOUMNS, MEDIUM_LABEL, MEDIUM_SPEED, MEDIUM_CHANGE),
+        HARD(HARD_COLOUMNS, HARD_LABEL, HARD_SPEED, HARD_CHANGE);
 
         int coloumns;
         float speed;
         int colorChange;
         String label;
 
-        Difficulty(int coloumns, String label,float speed,int colorChange) {
+        Difficulty(int coloumns, String label, float speed, int colorChange) {
             this.coloumns = coloumns;
             this.label = label;
-            this.speed=speed;
-            this.colorChange=colorChange;
+            this.speed = speed;
+            this.colorChange = colorChange;
         }
     }
 }

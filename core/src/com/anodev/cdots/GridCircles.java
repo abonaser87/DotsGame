@@ -1,9 +1,12 @@
 package com.anodev.cdots;
 
+import com.anodev.TweenAccessors.Value;
+import com.anodev.TweenAccessors.ValueAccessor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,6 +15,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
 
 
 /**
@@ -35,6 +42,10 @@ public class GridCircles extends InputAdapter {
     private DotsGame game;
     private Circles chosenColor;
     private ColorChecker checker;
+    private boolean misClick = false;
+    private TweenManager manager;
+    private Value alpha = new Value();
+    private Color transitionColor;
     public GridCircles(FitViewport viewport, Constants.Difficulty difficulty, DotsGame game) {
         this.game = game;
         this.viewport = viewport;
@@ -59,7 +70,8 @@ public class GridCircles extends InputAdapter {
         } else {
             topScore = prefs.getInteger("highScore");
         }
-
+        transitionColor = new Color();
+        prepareTransition(255, 255, 255, .5f);
     }
 
     public static void setHighScore(int val) {
@@ -78,7 +90,7 @@ public class GridCircles extends InputAdapter {
     }
 
     private void createCircle(float xOffset, float yOffset, Vector2 velocity, int row) {
-        x = new CirclesClient(xOffset, yOffset, color.getRandColor(difficulty.coloumns,row), viewport,difficulty.speed);
+        x = new CirclesClient(xOffset, yOffset, color.getRandColor(difficulty.coloumns, row), viewport, difficulty.speed);
         x.setVelocity(velocity);
         circle.add(x);
     }
@@ -145,13 +157,15 @@ public class GridCircles extends InputAdapter {
         Vector2 worldClick = viewport.unproject(new Vector2(screenX, screenY));
         for (CirclesClient x : circle) {
             if (worldClick.dst(x.getPosition()) < Constants.radius) {
-                counter+=1;
+                counter += 1;
                 checker.addColor(x.getColor(), x.getPosition());
                 if (checker.isMatching()) {
                     score += 1;
                 } else {
                     if (score > 0) {
                         score -= 1;
+                        transitionColor.set(x.getColor());
+                        misClick = true;
                     }
                     // TODO: Screen feedback that the choice was wrong ?
                 }
@@ -173,7 +187,7 @@ public class GridCircles extends InputAdapter {
         circle.clear();
         checker.clearAll();
         score = 0;
-        counter=0;
+        counter = 0;
     }
 
     public void render(ShapeRenderer renderer, float delta) {
@@ -184,6 +198,10 @@ public class GridCircles extends InputAdapter {
         for (LineShape line : checker.getLines()) {
             line.render(renderer);
         }
+        if (misClick) {
+            drawTransition(delta, renderer);
+            misClick = false;
+        }
         batch.begin();
         font.setColor(Color.BLACK);
         font.draw(batch, String.valueOf(score), Constants.screenWidth - xStep / 8, Constants.screenHeight - xStep / 8, 0, Align.center, false);
@@ -192,6 +210,28 @@ public class GridCircles extends InputAdapter {
 
     }
 
+    public void prepareTransition(int r, int g, int b, float duration) {
+        transitionColor.set(r / 255.0f, g / 255.0f, b / 255.0f, 1);
+        alpha.setValue(1);
+        Tween.registerAccessor(Value.class, new ValueAccessor());
+        manager = new TweenManager();
+        Tween.to(alpha, -1, duration).target(0)
+                .ease(TweenEquations.easeOutQuad).start(manager);
+    }
+
+    public void drawTransition(float delta, ShapeRenderer renderer) {
+        if (alpha.getValue() > 0) {
+            manager.update(delta);
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            renderer.begin(ShapeRenderer.ShapeType.Filled);
+            renderer.setColor(1, 1, 1, alpha.getValue());
+            renderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            renderer.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+
+        }
+    }
     public enum GameState {
         RUNNING, GAMEOVER
     }

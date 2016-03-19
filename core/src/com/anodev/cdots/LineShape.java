@@ -23,9 +23,9 @@ public class LineShape {
 
     public void render(ShapeRenderer renderer) {
         renderer.begin();
-        Gdx.gl20.glLineWidth(100.0f);
+        Gdx.gl20.glLineWidth(50.0f);
         renderer.set(ShapeRenderer.ShapeType.Line);
-        renderer.line(point1.x,point1.y,point2.x,point2.y,color,color1);
+        renderer.line(point1.x, point1.y, point2.x, point2.y, color, color1);
         renderer.end();
     }
 

@@ -37,7 +37,7 @@ public class ColorChecker {
 
         if (colors.size > 1) {
             if (colors.get(colors.size - 1).equals(mainColor)) {
-                connecter = new LineShape(colors.get(0),colors.get(colors.size - 1), postions.get(0), postions.get(postions.size - 1));
+                connecter = new LineShape(colors.get(0), colors.get(colors.size - 1), postions.get(0), postions.get(postions.size - 1));
                 lines.add(connecter);
                 postions.removeIndex(0);
                 colors.removeIndex(0);
