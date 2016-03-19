@@ -10,20 +10,22 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class LineShape {
     private Color color;
+    private Color color1;
     private Vector2 point1;
     private Vector2 point2;
 
-    public LineShape(Color color, Vector2 point1, Vector2 point2) {
+    public LineShape(Color color, Color color1, Vector2 point1, Vector2 point2) {
         this.color = color;
+        this.color1 = color1;
         this.point1 = point1;
         this.point2 = point2;
     }
 
     public void render(ShapeRenderer renderer) {
         renderer.begin();
-        renderer.set(ShapeRenderer.ShapeType.Filled);
-        renderer.setColor(color);
-        renderer.rectLine(point1, point2, Constants.THICKNESS);
+        Gdx.gl20.glLineWidth(100.0f);
+        renderer.set(ShapeRenderer.ShapeType.Line);
+        renderer.line(point1.x,point1.y,point2.x,point2.y,color,color1);
         renderer.end();
     }
 
