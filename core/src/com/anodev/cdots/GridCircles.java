@@ -1,5 +1,8 @@
 package com.anodev.cdots;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
 import com.anodev.TweenAccessors.Value;
 import com.anodev.TweenAccessors.ValueAccessor;
 import com.badlogic.gdx.Gdx;
@@ -15,10 +18,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-
-import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenEquations;
-import aurelienribon.tweenengine.TweenManager;
 
 
 /**
@@ -161,11 +160,13 @@ public class GridCircles extends InputAdapter {
                 checker.addColor(x.getColor(), x.getPosition());
                 if (checker.isMatching()) {
                     score += 1;
+                    AssetLoader.correct.play();
                 } else {
                     if (score > 0) {
                         score -= 1;
                         transitionColor.set(x.getColor());
                         misClick = true;
+                        AssetLoader.wrong.play();
                     }
                     // TODO: Screen feedback that the choice was wrong ?
                 }

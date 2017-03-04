@@ -1,5 +1,8 @@
 package com.anodev.cdots;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
 import com.anodev.TweenAccessors.Value;
 import com.anodev.TweenAccessors.ValueAccessor;
 import com.badlogic.gdx.Gdx;
@@ -8,10 +11,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-
-import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenEquations;
-import aurelienribon.tweenengine.TweenManager;
 
 /**
  * Created by 84170 on 05/01/2016.
@@ -56,6 +55,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         renderer.dispose();
+        AssetLoader.dispose();
     }
 
     @Override

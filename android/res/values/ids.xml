@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Google Play game services IDs.
+Save this file as res/values/games-ids.xml in your project.
+-->
+<resources>
+  <string name="app_id">1078757805596</string>
+  <string name="package_name">com.anodev.cdots</string>
+  <string name="achievement_first_game">CgkInJzn17IfEAIQAQ</string>
+  <string name="achievement_quick_fingers">CgkInJzn17IfEAIQAg</string>
+  <string name="achievement_look_at_that_">CgkInJzn17IfEAIQAw</string>
+  <string name="achievement_oh_yeah_">CgkInJzn17IfEAIQBA</string>
+  <string name="achievement_taptaptap">CgkInJzn17IfEAIQBQ</string>
+  <string name="leaderboard_easy_mode">CgkInJzn17IfEAIQBg</string>
+  <string name="leaderboard_medium_mode">CgkInJzn17IfEAIQBw</string>
+  <string name="leaderboard_hard_mode">CgkInJzn17IfEAIQCA</string>
+</resources>

@@ -60,11 +60,18 @@ public class MainMenu extends InputAdapter implements Screen {
         playBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if (!game.playServices.isSignedIn()) game.playServices.signIn();
                 game.showDifficultyScreen();
             }
         });
         ldrBtn = new TextButton("Leaderboards",skin);
         ldrBtn.addAction(sequence(alpha(0), parallel(fadeIn(.5f), moveBy(0, -20, .5f, Interpolation.pow5Out))));
+        ldrBtn.addListener(new ClickListener() {
+            @Override public void clicked(InputEvent event, float x, float y) {
+                //Show LeaderBoardScreen
+                //game.showLDRBoardScreen();
+            }
+        });
         crdtBtn = new TextButton("Credits",skin);
         crdtBtn.addAction(sequence(alpha(0), parallel(fadeIn(.5f), moveBy(0, -20, .5f, Interpolation.pow5Out))));
         table.add(playBtn).padBottom(50);
