@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 
 
 public class DotsGame extends Game {
-	public static PlayServices playServices;
+	PlayServices playServices;
 
 	public DotsGame(PlayServices playServices) {
 		this.playServices = playServices;
@@ -30,5 +30,9 @@ public class DotsGame extends Game {
 
 	public void showGameScreen(Constants.Difficulty difficulty) {
 		setScreen(new GameScreen(this, difficulty));
+	}
+
+	public void showLDRBoardScreen() {
+
 	}
 }

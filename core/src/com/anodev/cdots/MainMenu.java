@@ -69,7 +69,7 @@ public class MainMenu extends InputAdapter implements Screen {
         ldrBtn.addListener(new ClickListener() {
             @Override public void clicked(InputEvent event, float x, float y) {
                 //Show LeaderBoardScreen
-                //game.showLDRBoardScreen();
+                game.showLDRBoardScreen();
             }
         });
         crdtBtn = new TextButton("Credits",skin);

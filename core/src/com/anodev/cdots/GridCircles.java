@@ -45,6 +45,8 @@ public class GridCircles extends InputAdapter {
     private TweenManager manager;
     private Value alpha = new Value();
     private Color transitionColor;
+    private String leaderboardId;
+
     public GridCircles(FitViewport viewport, Constants.Difficulty difficulty, DotsGame game) {
         this.game = game;
         this.viewport = viewport;
@@ -114,6 +116,23 @@ public class GridCircles extends InputAdapter {
     private void gameOver(float delta, FitViewport viewport) {
         if (topScore < score) topScore = score;
         setHighScore(topScore);
+        switch (difficulty) {
+            case EASY:
+                leaderboardId = "CgkInJzn17IfEAIQBg";
+            case MEDIUM:
+                leaderboardId = "CgkInJzn17IfEAIQBw";
+            case HARD:
+                leaderboardId = "CgkInJzn17IfEAIQCA";
+        }
+
+        if (game.playServices.isSignedIn()) {
+            game.playServices.submitScore(score, leaderboardId);
+            if (topScore >= 0) game.playServices.unlockAchievement("CgkInJzn17IfEAIQAQ");
+            if (topScore >= 10) game.playServices.unlockAchievement("CgkInJzn17IfEAIQAg");
+            if (topScore >= 50) game.playServices.unlockAchievement("CgkInJzn17IfEAIQAw");
+            if (topScore >= 100) game.playServices.unlockAchievement("CgkInJzn17IfEAIQBA");
+            if (topScore >= 500) game.playServices.unlockAchievement("CgkInJzn17IfEAIQBQ");
+        }
         game.setScreen(new GameOverScreen(game, score, topScore, difficulty));
         restart();
     }
