@@ -126,7 +126,7 @@ public class GridCircles extends InputAdapter {
         }
 
         if (game.playServices.isSignedIn()) {
-            game.playServices.submitScore(score, leaderboardId);
+            if (topScore < score) game.playServices.submitScore(score, leaderboardId);
             if (topScore >= 0) game.playServices.unlockAchievement("CgkInJzn17IfEAIQAQ");
             if (topScore >= 10) game.playServices.unlockAchievement("CgkInJzn17IfEAIQAg");
             if (topScore >= 50) game.playServices.unlockAchievement("CgkInJzn17IfEAIQAw");
