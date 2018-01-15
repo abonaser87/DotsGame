@@ -44,6 +44,7 @@ public class Constants {
     public static final Vector2 EASY_CENTER = new Vector2(screenWidth / 4, screenHeight / 2);
     public static final Vector2 MEDIUM_CENTER = new Vector2(screenWidth / 2, screenHeight / 2);
     public static final Vector2 HARD_CENTER = new Vector2(screenWidth * 3 / 4, screenHeight / 2);
+    public static final Vector2 MAIN_MENU_CENTER = new Vector2(screenWidth / 2, screenHeight / 3);
 
     public static void setBG() {
         Gdx.gl.glClearColor(245.0f / 255.0f, 233.0f / 255.0f, 208.0f / 255.0f, 1);

@@ -33,11 +33,6 @@ public class DotsGame extends Game {
 	}
 
 	public void showLDRBoardScreen() {
-		// TODO:Add Leaderboard Screen
-		if (this.playServices.isSignedIn()) {
-			this.playServices.showScore("CgkInJzn17IfEAIQBg");
-		} else {
-			this.playServices.signIn();
-		}
+		setScreen(new LeaderBoardScreen(this));
 	}
 }
